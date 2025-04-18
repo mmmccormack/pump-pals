@@ -4,6 +4,9 @@ input {
     color: azure;
     font-family: 'Helvetica', Arial, sans-serif;
 }
+h1 {
+    text-align: center;
+}
 .primaryGridContainer {
     display: flex;
     flex-direction: column;

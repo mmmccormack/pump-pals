@@ -1,0 +1,58 @@
+body,
+input {
+    background-color: #050505;
+    color: azure;
+    font-family: 'Helvetica', Arial, sans-serif;
+}
+.primaryGridContainer {
+    display: flex;
+    flex-direction: column;
+}
+.row,
+.dataRow,
+.headerRow,
+.bottomRow {
+    display: flex;
+    align-items: center;
+}
+.emptyContainer,
+.nameContainer,
+.exerciseContainer,
+.buttonContainer,
+.repsContainer {
+    max-width: 104px;
+    margin: 4px 8px;
+}
+.emptyContainer input {
+    background-color: dodgerblue;
+}
+input {
+    max-width: 104px;
+    height: 30px;
+    border: 2px solid azure;
+    border-radius: 4px;
+    text-align: center;
+}
+.buttonContainer {
+    height: 30px;
+    width: 104px;
+    max-width: 104px;
+    border: 2px solid gray;
+    background: dimgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+}
+.repsContainer input {
+    background-color: darkred;
+    color: azure;
+}
+.repsContainer input,
+.nameContainer input {
+    font-size: 150%;
+}
+.resetButton {
+    max-width: 80px;
+    margin: 0 18px;
+}

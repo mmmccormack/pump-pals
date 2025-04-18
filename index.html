@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Pump Pals Tracker</title>
+</head>
+<body>
+    <div class="primaryGridContainer">
+        <div class="row">
+            <div class="headerRow">
+                <div class="emptyContainer">
+                    <input type="text">
+                </div>
+                <div class="nameContainer nameContainer1">
+                    <input type="text" name="name" value="Name">
+                </div>
+                <div class="buttonContainer addColumn">Add Name</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="dataRow dataRow1">
+                <div class="exerciseContainer exerciseContainer1">
+                    <input type="text" name="exercise" value="exercise">
+                </div>
+                <div class="repsContainer repsContainer1">
+                    <input type="text" name="name" value="">
+                </div>
+            </div>
+        </div>
+        <div class="bottomRow">
+            <div class="buttonContainer addRow">Add Workout</div>
+            <div class="buttonContainer resetButton resetColumn1">Reset</div>
+        </div>
+    </div>
+</body>
+<script>
+
+    const resetColumn = column => {
+        const totalRows = document.querySelectorAll('.dataRow');
+        totalRows.forEach(row => {
+            const repsInRow = row.querySelectorAll('.repsContainer input');
+            repsInRow.forEach((repContainer, index) => {
+                if (index == column - 1) {
+                    repContainer.style.background = 'darkred';
+                    repContainer.style.color = 'azure';
+                }
+            });
+        })
+    }
+
+    const addRow = (totalRows, totalColumns) => {
+        const currentRowList = document.querySelectorAll('.row');
+        const lastRow = currentRowList[currentRowList.length - 1];
+        const newRow = document.createElement('div');
+        newRow.classList.add('row');
+        newRow.innerHTML = `
+            <div class="dataRow dataRow${totalRows + 1}">
+                <div class="exerciseContainer exerciseContainer${totalRows + 1}">
+                    <input type="text" name="exercise" value="exercise">
+                </div>
+            </div>
+        `;
+        lastRow.after(newRow)
+        for (let i = 1; i < totalColumns + 1; i++) {
+            const repsContainer = document.createElement('div');
+            repsContainer.classList.add(`repsContainer`);
+            repsContainer.classList.add(`repsContainer${totalRows + 1}`);
+            repsContainer.innerHTML = `<input type="text" name="name" value="">`;
+            const latestDataRow = document.querySelector(`.dataRow${totalRows + 1}`);
+            latestDataRow.appendChild(repsContainer);
+        }
+    }
+
+    const addColumn = (totalRows, totalColumns) => {
+        const headerRow = document.querySelector(`.headerRow`);
+        const newName = document.createElement('div');
+        newName.classList.add(`nameContainer`);
+        newName.classList.add(`nameContainer${totalColumns + 1}`);
+        newName.innerHTML = `<input type="text" name="name" value="Name">`;
+        document.querySelector(`.nameContainer${totalColumns}`).after(newName);
+        for (let i = 1; i < totalRows + 1; i++) {
+            const repsContainer = document.createElement('div');
+            repsContainer.classList.add(`repsContainer`);
+            repsContainer.classList.add(`repsContainer${totalColumns + 1}`);
+            repsContainer.innerHTML = `<input type="text" name="name" value="">`;
+            document.querySelector(`.dataRow${i}`).appendChild(repsContainer);
+        }
+        const resetButton = document.createElement('div');
+        resetButton.classList.add('buttonContainer');
+        resetButton.classList.add('resetButton');
+        resetButton.classList.add(`resetColumn${totalRows + 1}`);
+        resetButton.innerText = `Reset`;
+        resetButton.addEventListener('click', () => resetColumn(totalRows + 1));
+        document.querySelector(`.bottomRow`).appendChild(resetButton);
+    }
+
+    const addButtons = document.querySelectorAll('.buttonContainer');
+    addButtons.forEach(button => button.addEventListener('click', e => {
+        const addCommand = e.target.classList[1];
+        addColumnOrRow(addCommand);
+    }));
+
+    const addColumnOrRow = command => {
+        const totalColumns = document.querySelectorAll('.nameContainer').length;
+        const totalRows = document.querySelectorAll('.dataRow').length;
+        if (command == 'addRow') addRow(totalRows, totalColumns);
+        if (command == 'addColumn') addColumn(totalRows, totalColumns);
+        updateRepsBoxes();
+    }
+
+    // The item (or items) to press and hold on
+    
+    let timerID;
+    let counter = 0;
+    let currentRepsBox;
+    let pressHoldEvent = new CustomEvent("pressHold");
+    let pressHoldDuration = 40;
+    
+    const updateRepsBoxes = () => {
+        const repsBoxes = document.querySelectorAll('.repsContainer input');
+        repsBoxes.forEach(repsBox => {
+            repsBox.removeEventListener("mousedown", pressingDown, false);
+            repsBox.removeEventListener("mouseup", notPressingDown, false);
+            repsBox.removeEventListener("mouseleave", notPressingDown, false);
+            repsBox.removeEventListener("touchstart", pressingDown, false);
+            repsBox.removeEventListener("touchend", notPressingDown, false);
+            repsBox.removeEventListener("pressHold", doSomething, false);
+            repsBox.addEventListener("mousedown", pressingDown, false);
+            repsBox.addEventListener("mouseup", notPressingDown, false);
+            repsBox.addEventListener("mouseleave", notPressingDown, false);
+            repsBox.addEventListener("touchstart", pressingDown, false);
+            repsBox.addEventListener("touchend", notPressingDown, false);
+            repsBox.addEventListener("pressHold", doSomething, false);
+        })
+    }
+
+    const pressingDown = e => {
+      currentRepsBox = e.target;
+      requestAnimationFrame(timer);
+    }
+
+    const notPressingDown = () => {
+      cancelAnimationFrame(timerID);
+      counter = 0;
+    }
+
+    const timer = () => {
+      if (counter < pressHoldDuration) {
+        timerID = requestAnimationFrame(timer);
+        counter++;
+      } else {
+        currentRepsBox.dispatchEvent(pressHoldEvent);
+      }
+    }
+
+    const doSomething = e => {
+      e.target.style.background = 'chartreuse';
+      e.target.style.color = 'black';
+    }
+
+    updateRepsBoxes();
+    document.querySelector('.resetColumn1').addEventListener('click', () => resetColumn(1));
+
+</script>
+</html>

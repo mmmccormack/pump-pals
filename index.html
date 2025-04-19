@@ -36,6 +36,7 @@
         </div>
     </div>
 </body>
+<script src="./DragDropTouch.js"></script>
 <script>
 
     const resetColumn = column => {
@@ -130,13 +131,13 @@
             repsBox.removeEventListener("mouseleave", notPressingDown, false);
             repsBox.removeEventListener("touchstart", pressingDown, false);
             repsBox.removeEventListener("touchend", notPressingDown, false);
-            repsBox.removeEventListener("pressHold", doSomething, false);
+            repsBox.removeEventListener("pressHold", pumpComplete, false);
             repsBox.addEventListener("mousedown", pressingDown, false);
             repsBox.addEventListener("mouseup", notPressingDown, false);
             repsBox.addEventListener("mouseleave", notPressingDown, false);
             repsBox.addEventListener("touchstart", pressingDown, false);
             repsBox.addEventListener("touchend", notPressingDown, false);
-            repsBox.addEventListener("pressHold", doSomething, false);
+            repsBox.addEventListener("pressHold", pumpComplete, false);
         })
     }
 
@@ -159,7 +160,7 @@
       }
     }
 
-    const doSomething = e => {
+    const pumpComplete = e => {
       e.target.style.background = 'chartreuse';
       e.target.style.color = 'black';
       e.target.value += ` 💪🏼`;

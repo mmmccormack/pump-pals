@@ -36,7 +36,6 @@
         </div>
     </div>
 </body>
-<!-- <script src="./DragDropTouch.js"></script> -->
 <script>
 
     const resetColumn = column => {
@@ -47,9 +46,6 @@
                 if (index == column - 1) {
                     repContainer.style.background = 'darkred';
                     repContainer.style.color = 'azure';
-                    // let repValue = repContainer.value;
-                    // repValue = repValue.replaceAll(` 💪🏼`, '');
-                    // repContainer.value = repValue;
                 }
             });
         })
@@ -125,47 +121,13 @@
     
     const updateRepsBoxes = () => {
         const repsBoxes = document.querySelectorAll('.repsContainer input');
-        repsBoxes.forEach(repsBox => {
-            repsBox.addEventListener('dblclick', () => pumpComplete(repsBox))
-            // repsBox.removeEventListener("mousedown", pressingDown, false);
-            // repsBox.removeEventListener("mouseup", notPressingDown, false);
-            // repsBox.removeEventListener("mouseleave", notPressingDown, false);
-            // repsBox.removeEventListener("touchstart", pressingDown, false);
-            // repsBox.removeEventListener("touchend", notPressingDown, false);
-            // repsBox.removeEventListener("pressHold", pumpComplete, false);
-            // repsBox.addEventListener("mousedown", pressingDown, false);
-            // repsBox.addEventListener("mouseup", notPressingDown, false);
-            // repsBox.addEventListener("mouseleave", notPressingDown, false);
-            // repsBox.addEventListener("touchstart", pressingDown, false);
-            // repsBox.addEventListener("touchend", notPressingDown, false);
-            // repsBox.addEventListener("pressHold", pumpComplete, false);
-        })
+        repsBoxes.forEach(repsBox =>
+            repsBox.addEventListener('dblclick', () => pumpComplete(repsBox)))
     }
-
-    // const pressingDown = e => {
-    //   currentRepsBox = e.target;
-    //   requestAnimationFrame(timer);
-    // }
-
-    // const notPressingDown = () => {
-    //   cancelAnimationFrame(timerID);
-    //   counter = 0;
-    // }
-
-    // const timer = () => {
-    //   if (counter < pressHoldDuration) {
-    //     timerID = requestAnimationFrame(timer);
-    //     counter++;
-    //   } else {
-    //     currentRepsBox.dispatchEvent(pressHoldEvent);
-    //   }
-    // }
 
     const pumpComplete = e => {
       e.style.background = 'chartreuse';
       e.style.color = 'black';
-    //   const currentValue = e.value.split(` `);
-    //   e.value = `${currentValue[0]} 💪🏼`;
     }
 
     updateRepsBoxes();

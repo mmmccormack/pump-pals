@@ -27,6 +27,7 @@
                 </div>
                 <div class="repsContainer repsContainer1">
                     <input type="text" name="name" value="">
+                    <div class="completeRep">done</div>
                 </div>
             </div>
         </div>
@@ -68,7 +69,7 @@
             const repsContainer = document.createElement('div');
             repsContainer.classList.add(`repsContainer`);
             repsContainer.classList.add(`repsContainer${totalRows + 1}`);
-            repsContainer.innerHTML = `<input type="text" name="name" value="">`;
+            repsContainer.innerHTML = `<input type="text" name="name" value=""><div class="completeRep">done</div>`;
             const latestDataRow = document.querySelector(`.dataRow${totalRows + 1}`);
             latestDataRow.appendChild(repsContainer);
         }
@@ -85,7 +86,7 @@
             const repsContainer = document.createElement('div');
             repsContainer.classList.add(`repsContainer`);
             repsContainer.classList.add(`repsContainer${totalColumns + 1}`);
-            repsContainer.innerHTML = `<input type="text" name="name" value="">`;
+            repsContainer.innerHTML = `<input type="text" name="name" value=""><div class="completeRep">done</div>`;
             document.querySelector(`.dataRow${i}`).appendChild(repsContainer);
         }
         const resetButton = document.createElement('div');
@@ -113,21 +114,16 @@
 
     // The item (or items) to press and hold on
     
-    let timerID;
-    let counter = 0;
-    let currentRepsBox;
-    let pressHoldEvent = new CustomEvent("pressHold");
-    let pressHoldDuration = 40;
-    
     const updateRepsBoxes = () => {
-        const repsBoxes = document.querySelectorAll('.repsContainer input');
+        const repsBoxes = document.querySelectorAll('.completeRep');
         repsBoxes.forEach(repsBox =>
-            repsBox.addEventListener('dblclick', () => pumpComplete(repsBox)))
+            repsBox.addEventListener('click', () => pumpComplete(repsBox.previousElementSibling)));
     }
 
-    const pumpComplete = e => {
-      e.style.background = 'chartreuse';
-      e.style.color = 'black';
+    const pumpComplete = repsBox => {
+        console.log(repsBox)
+        repsBox.style.background = 'chartreuse';
+        repsBox.style.color = 'black';
     }
 
     updateRepsBoxes();

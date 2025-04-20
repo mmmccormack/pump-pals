@@ -50,10 +50,29 @@ input {
 .repsContainer input {
     background-color: darkred;
     color: azure;
+    text-align: left;
 }
 .repsContainer input,
 .nameContainer input {
     font-size: 150%;
+}
+.repsContainer {
+    position: relative;
+}
+.completeRep {
+    background:
+    azure;
+    height: 36px;
+    position: absolute;
+    width: 45px;
+    right: -6px;
+    top: 0;
+    border-bottom-right-radius: 4px;
+    z-index: 10;
+    color: #050505;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .resetButton {
     max-width: 80px;

@@ -18,7 +18,7 @@ h1 {
     display: flex;
     align-items: center;
 }
-.emptyContainer,
+.saveContainer,
 .nameContainer,
 .exerciseContainer,
 .buttonContainer,
@@ -26,15 +26,19 @@ h1 {
     max-width: 104px;
     margin: 4px 8px;
 }
-.emptyContainer input {
+.saveContainer input {
     background-color: dodgerblue;
 }
-input {
+input,
+#saveWorkout {
     max-width: 104px;
     height: 30px;
     border: 2px solid azure;
     border-radius: 4px;
     text-align: center;
+}
+#saveWorkout {
+    width: 104px;
 }
 .buttonContainer {
     height: 30px;

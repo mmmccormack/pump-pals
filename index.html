@@ -11,11 +11,11 @@
         <h1>PUMP IT UP BOYS</h1>
         <div class="row">
             <div class="headerRow">
-                <div class="emptyContainer">
-                    <input type="text">
+                <div class="saveContainer">
+                    <input type="submit" value="Save Workout"  id="saveWorkout">
                 </div>
                 <div class="nameContainer nameContainer1">
-                    <input type="text" name="name" value="Name">
+                    <input type="text" name="name" placeholder="Name">
                 </div>
                 <div class="buttonContainer addColumn">Add Name</div>
             </div>
@@ -23,10 +23,10 @@
         <div class="row">
             <div class="dataRow dataRow1">
                 <div class="exerciseContainer exerciseContainer1">
-                    <input type="text" name="exercise" value="exercise">
+                    <input type="text" name="exercise" placeholder="exercise">
                 </div>
                 <div class="repsContainer repsContainer1">
-                    <input type="text" name="name" value="">
+                    <input type="text" name="name" placeholder="#">
                     <div class="completeRep">done</div>
                 </div>
             </div>
@@ -37,7 +37,35 @@
         </div>
     </div>
 </body>
-<script>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+  
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+  
+    // TODO: Add SDKs for Firebase products that you want to use
+  
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+  
+    // Your web app's Firebase configuration
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyDK72PFx0q0sgHILWwpzXFzfKzCuZI31M8",
+      authDomain: "pump-pals-8fcd1.firebaseapp.com",
+      projectId: "pump-pals-8fcd1",
+      storageBucket: "pump-pals-8fcd1.firebasestorage.app",
+      messagingSenderId: "133060959480",
+      appId: "1:133060959480:web:9827c5bf984022de0b2f0d"
+    };
+  
+  
+    // Initialize Firebase
+  
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app)
+    const dbRef = ref(database);
+
 
     const resetColumn = column => {
         const totalRows = document.querySelectorAll('.dataRow');
@@ -60,7 +88,7 @@
         newRow.innerHTML = `
             <div class="dataRow dataRow${totalRows + 1}">
                 <div class="exerciseContainer exerciseContainer${totalRows + 1}">
-                    <input type="text" name="exercise" value="exercise">
+                    <input type="text" name="exercise" placeholder="exercise">
                 </div>
             </div>
         `;
@@ -68,8 +96,8 @@
         for (let i = 1; i < totalColumns + 1; i++) {
             const repsContainer = document.createElement('div');
             repsContainer.classList.add(`repsContainer`);
-            repsContainer.classList.add(`repsContainer${totalRows + 1}`);
-            repsContainer.innerHTML = `<input type="text" name="name" value=""><div class="completeRep">done</div>`;
+            repsContainer.classList.add(`repsContainer${i}`);
+            repsContainer.innerHTML = `<input type="text" name="name" placeholder="#"><div class="completeRep">done</div>`;
             const latestDataRow = document.querySelector(`.dataRow${totalRows + 1}`);
             latestDataRow.appendChild(repsContainer);
         }
@@ -80,13 +108,13 @@
         const newName = document.createElement('div');
         newName.classList.add(`nameContainer`);
         newName.classList.add(`nameContainer${totalColumns + 1}`);
-        newName.innerHTML = `<input type="text" name="name" value="Name">`;
+        newName.innerHTML = `<input type="text" name="name" placeholder="Name">`;
         document.querySelector(`.nameContainer${totalColumns}`).after(newName);
         for (let i = 1; i < totalRows + 1; i++) {
             const repsContainer = document.createElement('div');
             repsContainer.classList.add(`repsContainer`);
             repsContainer.classList.add(`repsContainer${totalColumns + 1}`);
-            repsContainer.innerHTML = `<input type="text" name="name" value=""><div class="completeRep">done</div>`;
+            repsContainer.innerHTML = `<input type="text" name="name" placeholder="#"><div class="completeRep">done</div>`;
             document.querySelector(`.dataRow${i}`).appendChild(repsContainer);
         }
         const resetButton = document.createElement('div');
@@ -98,12 +126,6 @@
         document.querySelector(`.bottomRow`).appendChild(resetButton);
     }
 
-    const addButtons = document.querySelectorAll('.buttonContainer');
-    addButtons.forEach(button => button.addEventListener('click', e => {
-        const addCommand = e.target.classList[1];
-        addColumnOrRow(addCommand);
-    }));
-
     const addColumnOrRow = command => {
         const totalColumns = document.querySelectorAll('.nameContainer').length;
         const totalRows = document.querySelectorAll('.dataRow').length;
@@ -111,23 +133,85 @@
         if (command == 'addColumn') addColumn(totalRows, totalColumns);
         updateRepsBoxes();
     }
-
-    // The item (or items) to press and hold on
+    
+    const addButtons = document.querySelectorAll('.buttonContainer');
+    addButtons.forEach(button => button.addEventListener('click', e => {
+        const addCommand = e.target.classList[1];
+        addColumnOrRow(addCommand);
+    }));
     
     const updateRepsBoxes = () => {
         const repsBoxes = document.querySelectorAll('.completeRep');
-        repsBoxes.forEach(repsBox =>
-            repsBox.addEventListener('click', () => pumpComplete(repsBox.previousElementSibling)));
+        repsBoxes.forEach(repsBox => {
+            repsBox.removeEventListener('click', () => pumpComplete(repsBox.previousElementSibling));
+            repsBox.addEventListener('click', () => pumpComplete(repsBox.previousElementSibling))
+        });
     }
 
     const pumpComplete = repsBox => {
-        console.log(repsBox)
         repsBox.style.background = 'chartreuse';
         repsBox.style.color = 'black';
     }
 
+    const saveWorkout = () => {
+        const saveState = {};
+        const nameList = [];
+        const names = document.querySelectorAll(`.nameContainer input`);
+        names.forEach(name => nameList.push(name.value));
+        const exerciseList = [];
+        const exercises = document.querySelectorAll(`.exerciseContainer input`);
+        exercises.forEach(exercise => exerciseList.push(exercise.value));
+        const repsList = [];
+        for (let row = 1; row < exerciseList.length + 1; row++) {
+            for (let col = 1; col < nameList.length + 1; col++) {
+                const repValue = document.querySelector(`.dataRow${row} .repsContainer${col} input`).value;
+                repsList.push(~~repValue);
+            }
+        }
+        saveState.nameList = nameList;
+        saveState.exerciseList = exerciseList;
+        saveState.repsList = repsList;
+        // const firebaseObj = push(dbRef, 'submission');
+        const childRef = ref(database, '-OOPIYpyel7mWgvxBag7');
+        return set(childRef, saveState);
+    }
+
+    const loadWorkout = (nameList, exerciseList, repsList) => {
+        // const nameList = ['Cam', 'Pat', 'Taylor'];
+        // const exerciseList = ['pushups', 'situps', 'chinups', 'bicep curls'];
+        // const repsList = [9,10,10,12,15,10,3,1,1,10,10,10];
+        for (let i = 1; i < nameList.length; i++) addColumnOrRow('addColumn');
+        for (let i = 1; i < exerciseList.length; i++) addColumnOrRow('addRow');
+        nameList.forEach((name, index) => document.querySelector(`.nameContainer${index + 1} input`).value = name);
+        exerciseList.forEach((exercise, index) => document.querySelector(`.exerciseContainer${index + 1} input`).value = exercise);
+
+        for (let row = 1; row < exerciseList.length + 1; row++) {
+            for (let col = 1; col < nameList.length + 1; col++) {
+                const index = col * nameList.length + row - exerciseList.length;
+                document.querySelector(`.dataRow${row} .repsContainer${col} input`).value = repsList[index]
+            }
+        }
+    }
+
+    // loadWorkout();
+    get(dbRef).then((snapshot) => {
+        if(snapshot.exists()){
+            const saveState = snapshot.val()["-OOPIYpyel7mWgvxBag7"];
+            const nameList = saveState.nameList;
+            const exerciseList = saveState.exerciseList;
+            const repsList = saveState.repsList;
+            loadWorkout(nameList, exerciseList, repsList);
+        } else {
+            console.log("No data available")
+        }
+        // }).then(() => {
+        //     calcGangRating();
+        }).catch((error) => {
+        console.log(error)
+    });
+
     updateRepsBoxes();
     document.querySelector('.resetColumn1').addEventListener('click', () => resetColumn(1));
-
+    document.getElementById('saveWorkout').addEventListener('click', () => saveWorkout())
 </script>
 </html>

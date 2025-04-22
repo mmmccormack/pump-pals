@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-    <title>Pump Pals Tracker Copy</title>
+    <title>Pump Pals Tracker Staging</title>
 </head>
 <body>
     <div class="primaryGridContainer">
@@ -30,6 +30,7 @@
                     <div class="completeRep">done</div>
                 </div>
             </div>
+            <div class="buttonContainer resetButton removeRow0">Remove</div>
         </div>
         <div class="bottomRow">
             <div class="buttonContainer addRow">Add Workout</div>
@@ -80,6 +81,8 @@
         })
     }
 
+    const removeRow = row => document.querySelector(`.dataRow${row}`).parentElement.remove();
+
     const addRow = (totalRows, totalColumns) => {
         const currentRowList = document.querySelectorAll('.row');
         const lastRow = currentRowList[currentRowList.length - 1];
@@ -101,6 +104,13 @@
             const latestDataRow = document.querySelector(`.dataRow${totalRows}`);
             latestDataRow.appendChild(repsContainer);
         }
+        const removeButton = document.createElement('div');
+        removeButton.classList.add('buttonContainer');
+        removeButton.classList.add('resetButton');
+        removeButton.classList.add(`removeRow${totalRows}`);
+        removeButton.innerText = `Remove`;
+        removeButton.addEventListener('click', () => removeRow(totalRows));
+        document.querySelector(`.dataRow${totalRows}`).after(removeButton);
     }
 
     const addColumn = (totalRows, totalColumns) => {
@@ -209,6 +219,7 @@
 
     updateRepsBoxes();
     document.querySelector('.resetColumn0').addEventListener('click', () => resetColumn(0));
+    document.querySelector('.removeRow0').addEventListener('click', () => removeRow(0));
     document.getElementById('saveWorkout').addEventListener('click', () => saveWorkout())
 </script>
 </html>

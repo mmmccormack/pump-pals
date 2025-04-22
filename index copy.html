@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-    <title>Pump Pals Tracker</title>
+    <title>Pump Pals Tracker Copy</title>
 </head>
 <body>
     <div class="primaryGridContainer">
@@ -14,18 +14,18 @@
                 <div class="saveContainer">
                     <input type="submit" value="Save Workout"  id="saveWorkout">
                 </div>
-                <div class="nameContainer nameContainer1">
+                <div class="nameContainer nameContainer0">
                     <input type="text" name="name" placeholder="Name">
                 </div>
                 <div class="buttonContainer addColumn">Add Name</div>
             </div>
         </div>
         <div class="row">
-            <div class="dataRow dataRow1">
-                <div class="exerciseContainer exerciseContainer1">
+            <div class="dataRow dataRow0">
+                <div class="exerciseContainer exerciseContainer0">
                     <input type="text" name="exercise" placeholder="exercise">
                 </div>
-                <div class="repsContainer repsContainer1">
+                <div class="repsContainer repsContainer0">
                     <input type="text" name="name" placeholder="#">
                     <div class="completeRep">done</div>
                 </div>
@@ -33,7 +33,7 @@
         </div>
         <div class="bottomRow">
             <div class="buttonContainer addRow">Add Workout</div>
-            <div class="buttonContainer resetButton resetColumn1">Reset</div>
+            <div class="buttonContainer resetButton resetColumn0">Reset</div>
         </div>
     </div>
 </body>
@@ -72,7 +72,7 @@
         totalRows.forEach(row => {
             const repsInRow = row.querySelectorAll('.repsContainer input');
             repsInRow.forEach((repContainer, index) => {
-                if (index == column - 1) {
+                if (index == column) {
                     repContainer.style.background = 'darkred';
                     repContainer.style.color = 'azure';
                 }
@@ -86,19 +86,19 @@
         const newRow = document.createElement('div');
         newRow.classList.add('row');
         newRow.innerHTML = `
-            <div class="dataRow dataRow${totalRows + 1}">
-                <div class="exerciseContainer exerciseContainer${totalRows + 1}">
+            <div class="dataRow dataRow${totalRows}">
+                <div class="exerciseContainer exerciseContainer${totalRows}">
                     <input type="text" name="exercise" placeholder="exercise">
                 </div>
             </div>
         `;
         lastRow.after(newRow)
-        for (let i = 1; i < totalColumns + 1; i++) {
+        for (let i = 0; i < totalColumns; i++) {
             const repsContainer = document.createElement('div');
             repsContainer.classList.add(`repsContainer`);
             repsContainer.classList.add(`repsContainer${i}`);
             repsContainer.innerHTML = `<input type="text" name="name" placeholder="#"><div class="completeRep">done</div>`;
-            const latestDataRow = document.querySelector(`.dataRow${totalRows + 1}`);
+            const latestDataRow = document.querySelector(`.dataRow${totalRows}`);
             latestDataRow.appendChild(repsContainer);
         }
     }
@@ -107,22 +107,22 @@
         const headerRow = document.querySelector(`.headerRow`);
         const newName = document.createElement('div');
         newName.classList.add(`nameContainer`);
-        newName.classList.add(`nameContainer${totalColumns + 1}`);
+        newName.classList.add(`nameContainer${totalColumns}`);
         newName.innerHTML = `<input type="text" name="name" placeholder="Name">`;
-        document.querySelector(`.nameContainer${totalColumns}`).after(newName);
-        for (let i = 1; i < totalRows + 1; i++) {
+        document.querySelector(`.nameContainer${totalColumns - 1}`).after(newName);
+        for (let i = 0; i < totalRows; i++) {
             const repsContainer = document.createElement('div');
             repsContainer.classList.add(`repsContainer`);
-            repsContainer.classList.add(`repsContainer${totalColumns + 1}`);
+            repsContainer.classList.add(`repsContainer${totalColumns}`);
             repsContainer.innerHTML = `<input type="text" name="name" placeholder="#"><div class="completeRep">done</div>`;
             document.querySelector(`.dataRow${i}`).appendChild(repsContainer);
         }
         const resetButton = document.createElement('div');
         resetButton.classList.add('buttonContainer');
         resetButton.classList.add('resetButton');
-        resetButton.classList.add(`resetColumn${totalColumns + 1}`);
+        resetButton.classList.add(`resetColumn${totalColumns}`);
         resetButton.innerText = `Reset`;
-        resetButton.addEventListener('click', () => resetColumn(totalColumns + 1));
+        resetButton.addEventListener('click', () => resetColumn(totalColumns));
         document.querySelector(`.bottomRow`).appendChild(resetButton);
     }
 
@@ -162,10 +162,13 @@
         const exercises = document.querySelectorAll(`.exerciseContainer input`);
         exercises.forEach(exercise => exerciseList.push(exercise.value));
         const repsList = [];
-        for (let row = 1; row < exerciseList.length + 1; row++) {
-            for (let col = 1; col < nameList.length + 1; col++) {
+        const numberOfRepsRecorded = document.querySelectorAll('.repsContainer');
+        numberOfRepsRecorded.forEach(rep => repsList.push(0));
+        for (let row = 0; row < exerciseList.length; row++) {
+            for (let col = 0; col < nameList.length; col++) {
+                const index = col * exerciseList.length + row;
                 const repValue = document.querySelector(`.dataRow${row} .repsContainer${col} input`).value;
-                repsList.push(~~repValue);
+                repsList.splice(index, 1, ~~repValue);
             }
         }
         saveState.nameList = nameList;
@@ -177,21 +180,19 @@
     }
 
     const loadWorkout = (nameList, exerciseList, repsList) => {
-        for (let i = 1; i < nameList.length; i++) addColumnOrRow('addColumn');
-        for (let i = 1; i < exerciseList.length; i++) addColumnOrRow('addRow');
-        nameList.forEach((name, index) => document.querySelector(`.nameContainer${index + 1} input`).value = name);
-        exerciseList.forEach((exercise, index) => document.querySelector(`.exerciseContainer${index + 1} input`).value = exercise);
+        for (let i = 0; i < nameList.length -1; i++) addColumnOrRow('addColumn');
+        for (let i = 0; i < exerciseList.length -1; i++) addColumnOrRow('addRow');
+        nameList.forEach((name, index) => document.querySelector(`.nameContainer${index} input`).value = name);
+        exerciseList.forEach((exercise, index) => document.querySelector(`.exerciseContainer${index} input`).value = exercise);
 
-        for (let row = 1; row < exerciseList.length + 1; row++) {
-            for (let col = 1; col < nameList.length + 1; col++) {
-                const index = col * nameList.length + row - exerciseList.length;
-                console.log(index)
+        for (let row = 0; row < exerciseList.length; row++) {
+            for (let col = 0; col < nameList.length; col++) {
+                const index = col * exerciseList.length + row;
                 document.querySelector(`.dataRow${row} .repsContainer${col} input`).value = repsList[index]
             }
         }
     }
 
-    // loadWorkout();
     get(dbRef).then((snapshot) => {
         if(snapshot.exists()){
             const saveState = snapshot.val()["-OOPIYpyel7mWgvxBag7"];
@@ -202,14 +203,12 @@
         } else {
             console.log("No data available")
         }
-        // }).then(() => {
-        //     calcGangRating();
         }).catch((error) => {
         console.log(error)
     });
 
     updateRepsBoxes();
-    document.querySelector('.resetColumn1').addEventListener('click', () => resetColumn(1));
+    document.querySelector('.resetColumn0').addEventListener('click', () => resetColumn(0));
     document.getElementById('saveWorkout').addEventListener('click', () => saveWorkout())
 </script>
 </html>

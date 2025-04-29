@@ -81,7 +81,19 @@
         })
     }
 
-    const removeRow = row => document.querySelector(`.dataRow${row}`).parentElement.remove();
+    const removeRow = (e, row, rowNumber) => {
+        e.stopImmediatePropagation();
+        row.classList.add('removeRow');
+        setTimeout(() => {
+            
+            row.remove();
+            const remainingRows = document.querySelectorAll('.dataRow');
+            remainingRows.forEach((remainingRow, index) => {
+                remainingRow.classList.remove(remainingRow.classList[remainingRow.classList.length - 1]);
+                remainingRow.classList.add(`dataRow${index}`)
+            })
+        }, 500)
+    }
 
     const addRow = (totalRows, totalColumns) => {
         const currentRowList = document.querySelectorAll('.row');
@@ -109,7 +121,7 @@
         removeButton.classList.add('resetButton');
         removeButton.classList.add(`removeRow${totalRows}`);
         removeButton.innerText = `Remove`;
-        removeButton.addEventListener('click', () => removeRow(totalRows));
+        removeButton.addEventListener('click', e => removeRow(e, e.target.parentElement,totalRows));
         document.querySelector(`.dataRow${totalRows}`).after(removeButton);
     }
 
@@ -219,7 +231,7 @@
 
     updateRepsBoxes();
     document.querySelector('.resetColumn0').addEventListener('click', () => resetColumn(0));
-    document.querySelector('.removeRow0').addEventListener('click', () => removeRow(0));
+    document.querySelector('.removeRow0').addEventListener('click', e => removeRow(e, e.target.parentElement,0));
     document.getElementById('saveWorkout').addEventListener('click', () => saveWorkout())
 </script>
 </html>

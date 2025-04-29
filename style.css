@@ -17,6 +17,9 @@ h1 {
 .bottomRow {
     display: flex;
     align-items: center;
+    max-height: 44px;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
 }
 .saveContainer,
 .nameContainer,
@@ -81,4 +84,8 @@ input,
 .resetButton {
     max-width: 80px;
     margin: 0 18px;
+}
+.removeRow {
+    max-height: 0;
+
 }

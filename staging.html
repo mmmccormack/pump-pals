@@ -193,6 +193,9 @@
                 repsList.splice(index, 1, ~~repValue);
             }
         }
+        document.getElementById('saveWorkout').style.background = `green`;
+        setTimeout(() => document.getElementById('saveWorkout').style.background = `dodgerblue`, 1500);
+
         saveState.nameList = nameList;
         saveState.exerciseList = exerciseList;
         saveState.repsList = repsList;

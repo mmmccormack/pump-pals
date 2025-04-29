@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="primaryGridContainer">
-        <h1>PUMP IT UP BOYS!</h1>
+        <h1>PUMP IT UP BOYS</h1>
         <div class="row">
             <div class="headerRow">
                 <div class="saveContainer">
@@ -193,6 +193,9 @@
                 repsList.splice(index, 1, ~~repValue);
             }
         }
+        document.getElementById('saveWorkout').style.background = `green`;
+        setTimeout(() => document.getElementById('saveWorkout').style.background = `dodgerblue`, 1500);
+
         saveState.nameList = nameList;
         saveState.exerciseList = exerciseList;
         saveState.repsList = repsList;

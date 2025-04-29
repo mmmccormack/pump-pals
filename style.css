@@ -87,5 +87,8 @@ input,
 }
 .removeRow {
     max-height: 0;
-
+}
+.progressSaved {
+    background: green;
+    transition: background-color 2s ease;
 }

@@ -8,6 +8,12 @@
 </head>
 <body>
     <div class="primaryGridContainer">
+        <div class="weightLiftedModal">
+            <h2>Shit, <span id="pumperName"></span>!</h2>
+            <h3>You lifted <span id="weightLiftedTotal"></span> lbs right there!</h3>
+            <h3>That's the equivalent of around <span id="weightEquivalent"></span> <span id="itemToMeasureWith"></span>s!</h3>
+            <div class="buttonContainer closeModal">Close</div>
+        </div>
         <h1>PUMP IT UP BOYS</h1>
         <div class="row">
             <div class="headerRow">
@@ -66,7 +72,21 @@
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app)
     const dbRef = ref(database);
+    const pumpingCounter = {};
 
+    const itemsToWeigh = [
+        {"Shaquille O'Neal" : 325},
+        {"meatball sub" : 1.12},
+        {"1973 Buick Centurie" : 3650},
+        {"succulent Chinese meal" : 2.11},
+        {"male American black bear" : 250},
+        {"Italian panettone" : 2.2},
+        {"elephant dump" : 40},
+        {"bumper boat" : 240},
+        {"baseball" : 0.31},
+        {"NES cartridge" : 0.00771618},
+        {"Zendaya" : 125}
+    ];
 
     const resetColumn = column => {
         const totalRows = document.querySelectorAll('.dataRow');
@@ -79,6 +99,7 @@
                 }
             });
         })
+        displayResults(column);
     }
 
     const removeRow = (e, row, rowNumber) => {
@@ -166,13 +187,38 @@
         const repsBoxes = document.querySelectorAll('.completeRep');
         repsBoxes.forEach(repsBox => {
             repsBox.removeEventListener('click', () => pumpComplete(repsBox.previousElementSibling));
-            repsBox.addEventListener('click', () => pumpComplete(repsBox.previousElementSibling))
+            repsBox.addEventListener('click', e => pumpComplete(e, repsBox.previousElementSibling))
         });
     }
 
-    const pumpComplete = repsBox => {
+    const displayResults = pumperNumber => {
+        document.querySelector('.weightLiftedModal').style.display = 'flex';
+        document.getElementById('pumperName').innerText = pumpingCounter[pumperNumber].name;
+        document.getElementById('weightLiftedTotal').innerText = pumpingCounter[pumperNumber].totalWeightLifted;
+        const itemToWeigh = Math.floor(Math.random() * itemsToWeigh.length);
+        const weighedItem = Object.values(itemsToWeigh[itemToWeigh])
+        const weightEquivalent = Math.round(pumpingCounter[pumperNumber].totalWeightLifted / weighedItem)
+        document.getElementById('weightEquivalent').innerText = weightEquivalent;
+        document.getElementById('itemToMeasureWith').innerText = Object.keys(itemsToWeigh[itemToWeigh]);
+        pumpingCounter[pumperNumber].totalWeightLifted = 0;
+    }
+
+    const countWeight = repsBox => {
+        const numberOfReps = ~~repsBox.value;
+        const weightLifted = prompt("What was the weight number you be pumpin?");
+        const weightInSet = numberOfReps * ~~weightLifted;
+        // console.log(weightInSet)
+        const pumperMan = repsBox.parentElement.classList[repsBox.parentElement.classList.length -1]
+        const pumperNumber = pumperMan[pumperMan.length - 1];
+        pumpingCounter[pumperNumber].totalWeightLifted += weightInSet; 
+        // console.log(pumpingCounter)
+    }
+
+    const pumpComplete = (e, repsBox) => {
+        e.stopImmediatePropagation();
         repsBox.style.background = 'chartreuse';
         repsBox.style.color = 'black';
+        countWeight(repsBox);
     }
 
     const saveWorkout = () => {
@@ -207,9 +253,14 @@
     const loadWorkout = (nameList, exerciseList, repsList) => {
         for (let i = 0; i < nameList.length -1; i++) addColumnOrRow('addColumn');
         for (let i = 0; i < exerciseList.length -1; i++) addColumnOrRow('addRow');
-        nameList.forEach((name, index) => document.querySelector(`.nameContainer${index} input`).value = name);
+        nameList.forEach((name, index) => {
+            document.querySelector(`.nameContainer${index} input`).value = name;
+            pumpingCounter[index] = {
+                'name' : name,
+                'totalWeightLifted' : 0
+            }
+        });
         exerciseList.forEach((exercise, index) => document.querySelector(`.exerciseContainer${index} input`).value = exercise);
-
         for (let row = 0; row < exerciseList.length; row++) {
             for (let col = 0; col < nameList.length; col++) {
                 const index = col * exerciseList.length + row;
@@ -233,6 +284,7 @@
     });
 
     updateRepsBoxes();
+    document.querySelector('.closeModal').addEventListener('click', () => document.querySelector('.weightLiftedModal').style.display = 'none');
     document.querySelector('.resetColumn0').addEventListener('click', () => resetColumn(0));
     document.querySelector('.removeRow0').addEventListener('click', e => removeRow(e, e.target.parentElement,0));
     document.getElementById('saveWorkout').addEventListener('click', () => saveWorkout())

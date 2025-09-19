@@ -84,10 +84,23 @@
         {"elephant dump" : 40},
         {"bumper boat" : 240},
         {"baseball" : 0.31},
-        {"NES cartridge" : 0.00771618},
+        {"NES cartridge" : 0.25},
         {"Zendaya" : 125},
         {"Gary Busey OR Jake Busey, since they have about the same weight" : 180},
+        {"toilet" : 65},
+        {"monster truck tire" : 850},
+        {"Burger King Whopper sandwiche" : 0.625},
+        {"gunny sacks of potatoe" : 110},
     ];
+
+    const exerciseEquivalents = {
+        "pushup" : 0.65,
+        "situp" : 0.6,
+        "chinup" : 0.95,
+        "Bell squats" : 0.85,
+        "Bulgur squats" : 0.7,
+        "Kettlebell whips" : 0.7,
+    }
 
     const resetColumn = column => {
         const totalRows = document.querySelectorAll('.dataRow');
@@ -195,7 +208,7 @@
     const displayResults = pumperNumber => {
         document.querySelector('.weightLiftedModal').style.display = 'flex';
         document.getElementById('pumperName').innerText = pumpingCounter[pumperNumber].name;
-        document.getElementById('weightLiftedTotal').innerText = pumpingCounter[pumperNumber].totalWeightLifted;
+        document.getElementById('weightLiftedTotal').innerText = Math.round(pumpingCounter[pumperNumber].totalWeightLifted);
         const itemToWeigh = Math.floor(Math.random() * itemsToWeigh.length);
         const weighedItem = Object.values(itemsToWeigh[itemToWeigh])
         const weightEquivalent = Math.round(pumpingCounter[pumperNumber].totalWeightLifted / weighedItem)
@@ -204,22 +217,28 @@
         pumpingCounter[pumperNumber].totalWeightLifted = 0;
     }
 
-    const countWeight = repsBox => {
+    const countWeight = (repsBox, rowExercise) => {
         const numberOfReps = ~~repsBox.value;
-        const weightLifted = prompt("What was the weight number you be pumpin?");
-        const weightInSet = numberOfReps * ~~weightLifted;
-        // console.log(weightInSet)
+        let weightInSet = 0;
+        if (rowExercise == 'pushup' || rowExercise == 'situp' || rowExercise == 'chinup' || rowExercise == 'Bell squats' || rowExercise == 'Bulgur squats' || rowExercise == 'Kettlebell whips') {
+            const totalHumanWeight = prompt(`What's your total body weight?`);
+            weightInSet = ~~totalHumanWeight * exerciseEquivalents[rowExercise];
+        } else {
+            const weightLifted = prompt(`What was the weight number you be pumpin?`);
+            weightInSet = numberOfReps * ~~weightLifted;
+        }
         const pumperMan = repsBox.parentElement.classList[repsBox.parentElement.classList.length -1]
         const pumperNumber = pumperMan[pumperMan.length - 1];
         pumpingCounter[pumperNumber].totalWeightLifted += weightInSet; 
-        // console.log(pumpingCounter)
     }
 
     const pumpComplete = (e, repsBox) => {
+        const rowClass = repsBox.parentElement.parentElement.classList[1]
+        const rowExercise = document.querySelector(`.exerciseContainer${rowClass[rowClass.length -1]} input`).value;
         e.stopImmediatePropagation();
         repsBox.style.background = 'chartreuse';
         repsBox.style.color = 'black';
-        countWeight(repsBox);
+        countWeight(repsBox, rowExercise);
     }
 
     const saveWorkout = () => {

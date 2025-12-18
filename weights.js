@@ -53,6 +53,12 @@
             'percentage' : 1,
             'addlText' : 'How much weight you liftin?'
         },
+        'tricep dips' : {
+            'name' : 'tricep dips',
+            'aka' : ['tricep dips','tricep dippers','triceps dips', 'tricep dipsters'],
+            'percentage' : 1,
+            'addlText' : 'How much weight you liftin?'
+        },
         'bulgur squats' : {
             'name' : 'bulgur squats',
             'aka' : ['bulgur squats','bulgarian squats','bulgarian split squats'],

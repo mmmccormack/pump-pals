@@ -150,7 +150,7 @@ const getRowAndExercise = e => {
 const completeSet = (totalRows, exerciseName) => {
     let exerciseInfo;
 
-    for (let exercise in exercises) if (exercises[exercise].aka.includes(exerciseName)) exerciseInfo = exercises[exercise];
+    for (let exercise in exercises) if (exercises[exercise].aka.includes(exerciseName.toLowerCase())) exerciseInfo = exercises[exercise];
 
     const weightInSet = ~~prompt(exerciseInfo.addlText);
     const setsNumber = ~~document.getElementById(`sets${totalRows}`).value;

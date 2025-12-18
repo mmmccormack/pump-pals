@@ -1,28 +1,121 @@
-body,
-input {
-    background-color: #050505;
+body {
+    background: #050505;
     color: azure;
-    font-family: 'Helvetica', Arial, sans-serif;
 }
-h1 {
+body,
+input,
+button {
+    font-family: 'Helvetica';
+}
+h1,
+h2,
+h3,
+ul,
+#newPumperName {
     text-align: center;
 }
-.primaryGridContainer {
+.pumpLogin {
     display: flex;
     flex-direction: column;
-    position: relative;
+    align-items: center;
+}
+#newPumperName {
+    padding: 10px 0;
+    border-radius: 8px;
+    background-color: azure;
+    width: 80%;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+li {
+    border: 4px solid dodgerblue;
+    border-radius: 8px;
+    width: 200px;
+}
+#newPumperName,
+li {
+    padding: 10px 0;
+    margin: 10px 0;
+    font-size: 150%;
+}
+button {
+    height: 30px;
+    width: 100px;
+}
+.wrapper {
+    margin: 0 auto;
+    width: 340px;
+}
+.addNewPumper {
+    width: 200px;
+    height: 40px;
+    font-size: 125%;
+}
+.repsRow {
+    display: grid;
+    grid-template-columns: 80px 55px 10px 55px 40px 60px 40px;
+    & h6,
+    & div,
+    & input,
+    & button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 5px;
+        text-align: center;
+    }
+    & input {
+        font-size: 110%;
+        background: orange;
+        height: 20px;
+    }
+    & .exercise {
+        font-size: 70%;
+    }
+    & .weightInTotal {
+        font-size: 140%;
+    }
+    & .completedSet,
+    & .removeSet {
+        font-size: 180%;
+        height: 28px;
+    }
+    & .setComplete {
+        background: #00cc00;
+    }
+}
+.removeRow {
+    max-height: 0;
+}
+.bottomRow {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 5px;
+}
+.hidden {
+    display: none;
+}
+.workoutList {
+    display: grid;
+    grid-template-columns: 3fr 0.4fr;
+    grid-row-gap: 5px;
+    width: 200px;
+    margin: 0 auto;
+    border-top: 1px solid azure;
+    border-bottom: 1px solid azure;
+    padding: 10px;
 }
 .weightLiftedModal {
-    width: 50%;
-    border:
-    4px solid dodgerblue;
-    border-radius:
-    8px;
+    width: 300px;
+    border: 4px solid dodgerblue;
+    border-radius: 8px;
     display: none;
     flex-direction: column;
     align-items: center;
-    padding:
-    20px;
+    padding: 20px;
     position: absolute;
     top: 50%; 
     right: 50%;
@@ -30,83 +123,12 @@ h1 {
     background: #050505;
     z-index: 100;
 }
-h2, h3 {
-    text-align: center;
-}
-.row,
-.dataRow,
-.headerRow,
-.bottomRow {
-    display: flex;
-    align-items: center;
-    max-height: 44px;
-    overflow: hidden;
-    transition: max-height 0.5s ease;
-}
-.saveContainer,
-.nameContainer,
-.exerciseContainer,
-.buttonContainer,
-.repsContainer {
-    max-width: 104px;
-    margin: 4px 8px;
-}
-.saveContainer input {
-    background-color: dodgerblue;
-}
-input,
-#saveWorkout {
-    max-width: 104px;
-    height: 30px;
-    border: 2px solid azure;
-    border-radius: 4px;
-    text-align: center;
-}
-#saveWorkout {
-    width: 104px;
-}
-.buttonContainer {
-    height: 30px;
+.closeModal {
+    height: 50px;
     width: 104px;
     max-width: 104px;
-    border: 2px solid gray;
-    background: dimgray;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 4px;
-}
-.repsContainer input {
-    background-color: darkred;
-    color: azure;
-    text-align: left;
-}
-.repsContainer input,
-.nameContainer input {
-    font-size: 150%;
-}
-.repsContainer {
-    position: relative;
-}
-.completeRep {
-    background:
-    azure;
-    height: 36px;
-    position: absolute;
-    width: 45px;
-    right: -6px;
-    top: 0;
-    border-bottom-right-radius: 4px;
-    z-index: 10;
-    color: #050505;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.resetButton {
-    max-width: 80px;
-    margin: 0 18px;
-}
-.removeRow {
-    max-height: 0;
 }

@@ -78,6 +78,7 @@ const saveWorkout = pumperID => {
     let bodyWeight = document.getElementById(`bodyWeight`).value;
     if (bodyWeight == null || bodyWeight == '') {
         bodyWeight = ~~prompt(`What is your current body weight?`);
+        document.getElementById(`bodyWeight`).value = bodyWeight;
     }
     const allExercises = document.querySelectorAll(`.exercise`);
     const allSets = document.querySelectorAll(`.set`);

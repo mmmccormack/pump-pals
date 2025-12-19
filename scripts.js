@@ -72,6 +72,7 @@ const loadWorkout = pumperID => {
 }
 
 const saveWorkout = pumperID => {
+    document.querySelector(`body`).classList.add(`savedWorkout`);
     const workoutToSave = mainList[pumperID];
     const exercises = [], sets = [], reps = [];
     const allExercises = document.querySelectorAll(`.exercise`);
@@ -80,6 +81,9 @@ const saveWorkout = pumperID => {
     allExercises.forEach(exercise => exercises.push(exercise.value));
     allSets.forEach(set => sets.push(set.value));
     allReps.forEach(rep => reps.push(rep.value));
+    setTimeout(() => {
+        document.querySelector(`body`).classList.remove(`savedWorkout`);
+    }, 1000)
     if (workoutToSave.exercises == undefined) {
         // set workoutToSave
         workoutToSave.exercises = exercises;

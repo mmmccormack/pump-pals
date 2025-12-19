@@ -2,6 +2,18 @@ body {
     background: #050505;
     color: azure;
 }
+@keyframes savedWorkout {
+    0% {
+        background: lightgreen;
+    }
+    100% {
+        background: #050505;
+    }
+}
+.savedWorkout {
+    animation: savedWorkout 0.8s linear;
+    animation-iteration-count: 1;
+}
 body,
 input,
 button {

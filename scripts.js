@@ -161,19 +161,16 @@ const getRowAndExercise = e => {
     completeSet(rowNumber, exerciseName);
 }
 
-const completeSet = (totalRows, exerciseName) => {
-    let exerciseInfo;
-
-    for (let exercise in exercises) if (exercises[exercise].aka.includes(exerciseName.toLowerCase())) exerciseInfo = exercises[exercise];
-
+const completeSet = (rowNumber, exerciseName) => {
+    const exerciseInfo = exercises[exerciseName];
     const weightInSet = ~~prompt(exerciseInfo.addlText);
-    const setsNumber = ~~document.getElementById(`sets${totalRows}`).value;
-    const repsNumber = ~~document.getElementById(`reps${totalRows}`).value;
+    const setsNumber = ~~document.getElementById(`sets${rowNumber}`).value;
+    const repsNumber = ~~document.getElementById(`reps${rowNumber}`).value;
     const totalWeight = Math.round(setsNumber * repsNumber * (weightInSet * exerciseInfo.percentage));
-    document.querySelector(`.weightInTotal${totalRows}`).innerText = totalWeight;
-    const rowInputs = document.querySelectorAll(`.row${totalRows} input`);
+    document.querySelector(`.weightInTotal${rowNumber}`).innerText = totalWeight;
+    const rowInputs = document.querySelectorAll(`.row${rowNumber} input`);
     rowInputs.forEach(box => box.classList.add('setComplete'));
-    const rowSelects = document.querySelectorAll(`.row${totalRows} select`);
+    const rowSelects = document.querySelectorAll(`.row${rowNumber} select`);
     rowSelects.forEach(box => box.classList.add('setComplete'));
     checkWorkoutComplete();
 }

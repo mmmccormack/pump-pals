@@ -75,6 +75,10 @@ const saveWorkout = pumperID => {
     document.querySelector(`body`).classList.add(`savedWorkout`);
     const workoutToSave = mainList[pumperID];
     const exercises = [], sets = [], reps = [];
+    let bodyWeight = document.getElementById(`bodyWeight`).value;
+    if (bodyWeight == null || bodyWeight == '') {
+        bodyWeight = ~~prompt(`What is your current body weight?`);
+    }
     const allExercises = document.querySelectorAll(`.exercise`);
     const allSets = document.querySelectorAll(`.set`);
     const allReps = document.querySelectorAll(`.rep`);
@@ -86,6 +90,7 @@ const saveWorkout = pumperID => {
     }, 1000)
     if (workoutToSave.exercises == undefined) {
         // set workoutToSave
+        workoutToSave.bodyWeight = ~~bodyWeight;
         workoutToSave.exercises = exercises;
         workoutToSave.sets = sets;
         workoutToSave.reps = reps;
@@ -163,7 +168,12 @@ const getRowAndExercise = e => {
 
 const completeSet = (rowNumber, exerciseName) => {
     const exerciseInfo = exercises[exerciseName];
-    const weightInSet = ~~prompt(exerciseInfo.addlText);
+    let weightInSet;
+    if (exerciseInfo.percentage == 1) {
+        weightInSet = ~~prompt(exerciseInfo.addlText);
+    } else {
+        weightInSet = document.getElementById(`bodyWeight`).value;
+    }
     const setsNumber = ~~document.getElementById(`sets${rowNumber}`).value;
     const repsNumber = ~~document.getElementById(`reps${rowNumber}`).value;
     const totalWeight = Math.round(setsNumber * repsNumber * (weightInSet * exerciseInfo.percentage));
@@ -176,7 +186,7 @@ const completeSet = (rowNumber, exerciseName) => {
 }
 
 const checkWorkoutComplete = () => {
-    const allInputBoxes = document.querySelectorAll(`.pumpTracker input`);
+    const allInputBoxes = document.querySelectorAll(`.pumpTable input`);
     let counter = 0;
     allInputBoxes.forEach(box => { 
         const boxClasses = [...box.classList];
@@ -186,7 +196,9 @@ const checkWorkoutComplete = () => {
         let weightTotal = 0;
         const weightBoxes = document.querySelectorAll(`.weightInTotal`);
         weightBoxes.forEach(box => weightTotal = weightTotal + ~~box.innerText);
-        displayResults(weightTotal);
+        setTimeout(() => {
+            displayResults(weightTotal);
+        }, 1000)
     }
 }
 

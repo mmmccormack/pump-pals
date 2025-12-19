@@ -23,7 +23,8 @@ h1,
 h2,
 h3,
 ul,
-#newPumperName {
+#newPumperName,
+#bodyWeight {
     text-align: center;
 }
 .pumpLogin {
@@ -61,10 +62,25 @@ button {
     margin: 0 auto;
     width: 340px;
 }
+.intro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid azure;
+}
 .addNewPumper {
     width: 240px;
     height: 40px;
     font-size: 125%;
+}
+.bodyWeight {
+    font-size: 110%;
+    background: orange;
+    color: #050505;
+    height: 20px;
+    width: 50px;
 }
 .repsRow {
     display: grid;

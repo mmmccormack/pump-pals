@@ -56,7 +56,9 @@ button {
 }
 .repsRow {
     display: grid;
-    grid-template-columns: 95px 40px 10px 55px 40px 60px 40px;
+    grid-template-columns: 100px 30px 10px 35px 40px 60px 40px;
+    grid-column-gap: 5px;
+    align-items: center;
     & h6,
     & div,
     & input,
@@ -64,13 +66,17 @@ button {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 5px;
+        margin: 4px 0px;
         text-align: center;
     }
-    & input {
+    & input,
+    & select {
         font-size: 110%;
         background: orange;
         height: 20px;
+    }
+    & select {
+        height: 26px;
     }
     & .exercise {
         font-size: 70%;

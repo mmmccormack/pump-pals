@@ -32,21 +32,21 @@ const addNewPumper = name => {
     loadWorkout(newPostRef.key);
 }
 
-const loadWorkoutList = () => {
-    const workoutList = document.querySelector(`.workoutList`);
-    for (let exercise in exercises) {
-        const exerciseName = document.createElement(`div`);
-        exerciseName.innerText = exercise;
-        workoutList.appendChild(exerciseName);
-        const exerciseType = document.createElement(`div`);
-        if (exercises[exercise].percentage === 1) {
-            exerciseType.innerHTML = `<i class="fa-solid fa-dumbbell"></i>`;
-        } else {
-            exerciseType.innerHTML = `<i class="fa-solid fa-hand-fist"></i>`;
-        }
-        workoutList.appendChild(exerciseType);
-    }
-}
+// const loadWorkoutList = () => {
+//     const workoutList = document.querySelector(`.workoutList`);
+//     for (let exercise in exercises) {
+//         const exerciseName = document.createElement(`div`);
+//         exerciseName.innerText = exercise;
+//         workoutList.appendChild(exerciseName);
+//         const exerciseType = document.createElement(`div`);
+//         if (exercises[exercise].percentage === 1) {
+//             exerciseType.innerHTML = `<i class="fa-solid fa-dumbbell"></i>`;
+//         } else {
+//             exerciseType.innerHTML = `<i class="fa-solid fa-hand-fist"></i>`;
+//         }
+//         workoutList.appendChild(exerciseType);
+//     }
+// }
 
 const loadWorkout = pumperID => {
     const workoutInfo = mainList[pumperID];
@@ -68,7 +68,7 @@ const loadWorkout = pumperID => {
         allSets.forEach((set, index) => set.value = workoutInfo.sets[index]);
         allReps.forEach((rep, index) => rep.value = workoutInfo.reps[index]);
     }
-    loadWorkoutList();
+    // loadWorkoutList();
 }
 
 const saveWorkout = pumperID => {
@@ -96,13 +96,22 @@ const saveWorkout = pumperID => {
     }
 }
 
+const getWorkoutOptions = () => {
+    let options = ``;
+    for (let exercise in exercises) options = options + `<option value="${exercise}">${exercise} </option>`;
+    return options;
+}
+
 const addRow = () => {
     const totalRows = document.querySelectorAll('.dataRow').length;
     const currentRowList = document.querySelectorAll('.dataRow');
     const newRow = document.createElement('div');
     newRow.classList.add(`repsRow`,`dataRow`,`row${totalRows}`);
+    // <input type="text" id="exercise${totalRows}" class="exercise" placeholder="exercise">
     newRow.innerHTML = `
-        <input type="text" id="exercise${totalRows}" class="exercise" placeholder="exercise">
+        <select name="exercise${totalRows}" id="exercise${totalRows}" class="exercise">
+            ${getWorkoutOptions()}
+        </select>
         <input type="text" id="sets${totalRows}" class="inputNumber set" placeholder="sets">
         <div>X</div>
         <input type="text" id="reps${totalRows}" class="inputNumber rep" placeholder="reps">
@@ -137,6 +146,7 @@ const removeRow = (e, row) => {
             remainingRow.classList.remove(remainingRow.classList[remainingRow.classList.length - 1]);
             remainingRow.classList.add(`row${index}`)
         })
+        checkWorkoutComplete();
     }, 500)
 }
 
@@ -159,6 +169,8 @@ const completeSet = (totalRows, exerciseName) => {
     document.querySelector(`.weightInTotal${totalRows}`).innerText = totalWeight;
     const rowInputs = document.querySelectorAll(`.row${totalRows} input`);
     rowInputs.forEach(box => box.classList.add('setComplete'));
+    const rowSelects = document.querySelectorAll(`.row${totalRows} select`);
+    rowSelects.forEach(box => box.classList.add('setComplete'));
     checkWorkoutComplete();
 }
 
@@ -208,6 +220,8 @@ const pumpComparison = (previousPump, currentPump) => {
 const resetWorkout = () => {
     const rowInputs = document.querySelectorAll(`input`);
     rowInputs.forEach(box => box.classList.remove('setComplete'));
+    const rowSelects = document.querySelectorAll(`select`);
+    rowSelects.forEach(box => box.classList.remove('setComplete'));
     const weightTotals = document.querySelectorAll(`.weightInTotal`);
     weightTotals.forEach(box => box.innerText = ``);
     // need to reset running weight total variable

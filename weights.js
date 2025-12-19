@@ -26,7 +26,7 @@
         'bell squats' : {
             'name' : 'bell squats',
             'aka' : ['bell squats','kettlebell squats','bell squatters', 'kettlebell squatters', 'bell squatters', 'bell', 'kettlebell'],
-            'percentage' : 0.65,
+            'percentage' : 0.72,
             'addlText' : 'What is your body weight?'
         },
         'bell whips' : {
@@ -62,7 +62,7 @@
         'bulgur squats' : {
             'name' : 'bulgur squats',
             'aka' : ['bulgur squats','bulgarian squats','bulgarian split squats'],
-            'percentage' : 0.7,
+            'percentage' : 0.68,
             'addlText' : 'What is your body weight?'
         },
     }

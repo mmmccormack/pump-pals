@@ -1,21 +1,45 @@
 import { database, ref, dbRef, get, push, set, update } from "./firebase.js";
 
+// const setEx = () => {
+//     const childRef = ref(database);
+//     const exToPush = {exercises};
+//     return set(childRef, exToPush);
+// }
+// setEx();
+
+// const setWorkout = () => {
+//     const childRef = ref(database, 'exercises/');
+//     return update(childRef, test);
+//     console.log(childRef)
+//     const test = {
+//         'tester' : '50'
+//     };
+// }
+// setWorkout();
+
 let mainList = {};
 let pumperUID;
+let exercises = {};
 
 get(dbRef).then((snapshot) => {
     if(snapshot.exists()){
         mainList = snapshot.val();
+        exercises = mainList.exercises;
+        delete mainList.exercises;
         const pumperList = document.querySelector(`.pumperList`);
-        for (let pumper in mainList) {
-            const nameAndID = {};
-            nameAndID.name = mainList[pumper].name;
-            nameAndID.id = pumper;
-            const pumperInList = document.createElement(`li`);
-            pumperInList.innerText = nameAndID.name;
-            pumperInList.id = nameAndID.id;
-            pumperInList.addEventListener(`click`, e => loadWorkout(e.target.id));
-            pumperList.appendChild(pumperInList)
+        if (mainList !== null) {
+            for (let pumper in mainList) {
+                const nameAndID = {};
+                nameAndID.name = mainList[pumper].name;
+                nameAndID.id = pumper;
+                const pumperInList = document.createElement(`li`);
+                pumperInList.innerText = nameAndID.name;
+                pumperInList.id = nameAndID.id;
+                pumperInList.addEventListener(`click`, e => loadWorkout(e.target.id));
+                pumperList.appendChild(pumperInList)
+            }  
+        } else {
+            document.querySelector(`.noPumpers`).classList.remove(`hidden`);
         }
     } else {
         document.querySelector(`.noPumpers`).classList.remove(`hidden`);
@@ -29,24 +53,9 @@ const addNewPumper = name => {
     const newPostRef = push(dbRef, pumperData);
     mainList[newPostRef.key] = {};
     mainList[newPostRef.key].name = name;
+    mainList[newPostRef.key].bodyWeight = '';
     loadWorkout(newPostRef.key);
 }
-
-// const loadWorkoutList = () => {
-//     const workoutList = document.querySelector(`.workoutList`);
-//     for (let exercise in exercises) {
-//         const exerciseName = document.createElement(`div`);
-//         exerciseName.innerText = exercise;
-//         workoutList.appendChild(exerciseName);
-//         const exerciseType = document.createElement(`div`);
-//         if (exercises[exercise].percentage === 1) {
-//             exerciseType.innerHTML = `<i class="fa-solid fa-dumbbell"></i>`;
-//         } else {
-//             exerciseType.innerHTML = `<i class="fa-solid fa-hand-fist"></i>`;
-//         }
-//         workoutList.appendChild(exerciseType);
-//     }
-// }
 
 const loadWorkout = pumperID => {
     const workoutInfo = mainList[pumperID];
@@ -55,6 +64,7 @@ const loadWorkout = pumperID => {
     document.querySelector(`.pumpTracker`).style.display = `block`;
     document.getElementById(`pumper`).innerText = workoutInfo.name[0];
     document.querySelector(`.saveWorkout`).fbid = pumperID;
+    document.getElementById(`bodyWeight`).value = workoutInfo.bodyWeight;
     if (workoutInfo.exercises === undefined) {
         addRow();
     } else {
@@ -68,7 +78,6 @@ const loadWorkout = pumperID => {
         allSets.forEach((set, index) => set.value = workoutInfo.sets[index]);
         allReps.forEach((rep, index) => rep.value = workoutInfo.reps[index]);
     }
-    // loadWorkoutList();
 }
 
 const saveWorkout = pumperID => {
@@ -174,6 +183,10 @@ const completeSet = (rowNumber, exerciseName) => {
         weightInSet = ~~prompt(exerciseInfo.addlText);
     } else {
         weightInSet = document.getElementById(`bodyWeight`).value;
+        if (weightInSet == null || weightInSet == '') {
+            weightInSet = ~~prompt(`What is your current body weight?`);
+            document.getElementById(`bodyWeight`).value = weightInSet;
+        }
     }
     const setsNumber = ~~document.getElementById(`sets${rowNumber}`).value;
     const repsNumber = ~~document.getElementById(`reps${rowNumber}`).value;
@@ -231,6 +244,49 @@ const pumpComparison = (previousPump, currentPump) => {
     }
 }
 
+const addNewExercise = () => {
+    const exerciseToSave = {};
+    exerciseToSave.name = document.getElementById(`newExerciseName`).value;
+    const exerciseType = document.querySelector(`input[name="weightType"]:checked`).value;
+    if (exerciseType == 'body') {
+        const bodyWeightPercent = document.getElementById(`bodyWeightPercent`).value;
+        exerciseToSave.percentage = Number(`0.${bodyWeightPercent}`);
+        exerciseToSave.addlText = 'What is your body weight?';
+    } else if (exerciseType == 'free') {
+        exerciseToSave.percentage = 1;
+        exerciseToSave.addlText = 'How much weight you liftin?';
+    }
+    // add exercise to selects
+    addExerciseToSelects(exerciseToSave.name);
+
+    // show save state
+    document.querySelector(`.addExercise`).classList.add(`savedWorkout`);
+    setTimeout(() => {
+        document.querySelector(`.addExercise`).classList.remove(`savedWorkout`);
+    }, 1000)
+    document.getElementById(`newExerciseName`).value = '';
+    document.getElementById(`bodyWeightPercent`).value = '';
+    const exToPush = {};
+    exToPush[exerciseToSave.name] = {
+        'name' : exerciseToSave.name,
+        'percentage' : exerciseToSave.percentage,
+        'addlText' : exerciseToSave.addlText
+    }
+    // store in local to use right away
+    exercises[exerciseToSave.name] = exToPush[exerciseToSave.name];
+    // store in firebase
+    const childRef = ref(database, 'exercises/');
+    return update(childRef, exToPush);
+}
+
+const addExerciseToSelects = newExerciseName => {
+    const newOption = document.createElement(`option`);
+    newOption.value, newOption.text = newExerciseName;
+    const allSelects = document.querySelectorAll(`select`);
+    allSelects.forEach(select => select.add(newOption))
+}
+
+
 const resetWorkout = () => {
     const rowInputs = document.querySelectorAll(`input`);
     rowInputs.forEach(box => box.classList.remove('setComplete'));
@@ -241,6 +297,18 @@ const resetWorkout = () => {
     // need to reset running weight total variable
 }
 
+//radio button event listeners
+const freeWeightButton = document.getElementById(`free`);
+freeWeightButton.addEventListener(`change`, () => {
+    if (freeWeightButton.checked) document.getElementById(`bodyWeightPercent`).disabled = true;
+})
+const bodyWeightButton = document.getElementById(`body`);
+bodyWeightButton.addEventListener(`change`, () => {
+    if (bodyWeightButton.checked) document.getElementById(`bodyWeightPercent`).disabled = false;
+})
+
+
+// mainstay button event listeners
 document.querySelector(`.addNewPumper`).addEventListener(`click`, () => {
     const newPumperName = document.getElementById(`newPumperName`).value;
     addNewPumper(newPumperName);
@@ -248,6 +316,7 @@ document.querySelector(`.addNewPumper`).addEventListener(`click`, () => {
 document.querySelector('.addRow').addEventListener('click', () => addRow());
 document.querySelector('.reset').addEventListener('click', () => resetWorkout());
 document.querySelector(`.saveWorkout`).addEventListener(`click`, e => saveWorkout(e.target.fbid));
+document.querySelector(`.addExerciseButton`).addEventListener(`click`, () => addNewExercise());
 document.querySelector(`.closeModal`).addEventListener(`click`, () => {
     resetWorkout();
     document.querySelector(`.weightLiftedModal`).style.display = `none`;

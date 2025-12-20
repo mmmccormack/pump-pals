@@ -40,6 +40,25 @@
                 </div>
 
             </div>
+            <div class="addExercise">
+                <h3>Add a new exercise?</h3>
+                <h6>Exercise Name</h6>
+                <h6>Exercise Type</h6>
+                <h6>% of Body Weight</h6>
+                <input type="text" id="newExerciseName">
+                <div class="weightType">
+                    <div>
+                        <input type="radio" id="body" name="weightType" value="body" checked>
+                        <label for="body">Body Weight</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="free" name="weightType" value="free">
+                        <label for="free">Free Weight</label>
+                    </div>
+                </div>
+                <input type="number" name="bodyWeightPercent" id="bodyWeightPercent" min="0" max="99">
+                <button class="addExerciseButton">Add Exercise</button>
+            </div>
             <!-- modal -->
             <div class="weightLiftedModal">
                 <h3>💪🏼 <span id="exclamation"></span>, <span id="pumperName"></span>! <span style="display: inline-block; transform: scaleX(-1);">💪🏿</span></h3>

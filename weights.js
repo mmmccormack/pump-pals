@@ -1,60 +1,60 @@
-    const exercises = {
-        'push ups' : {
-            'name' : 'push ups',
-            'percentage' : 0.68,
-            'addlText' : 'What is your body weight?'
-        },
-        'sit ups' : {
-            'name' : 'sit ups',
-            'percentage' : 0.6,
-            'addlText' : 'What is your body weight?'
-        },
-        'pull ups' : {
-            'name' : 'pull ups',
-            'percentage' : 0.92,
-            'addlText' : 'What is your body weight?'
-        },
-        'curls' : {
-            'name' : 'curls',
-            'percentage' : 1,
-            'addlText' : 'How much weight you liftin?'
-        },
-        'bell squats' : {
-            'name' : 'bell squats',
-            'percentage' : 0.72,
-            'addlText' : 'What is your body weight?'
-        },
-        'bell whips' : {
-            'name' : 'bell whips',
-            'percentage' : 1,
-            'addlText' : 'How much weight you liftin?'
-        },
-        'bench press' : {
-            'name' : 'bench press',
-            'percentage' : 1,
-            'addlText' : 'How much weight you liftin?'
-        },
-        'rows' : {
-            'name' : 'rows',
-            'percentage' : 1,
-            'addlText' : 'How much weight you liftin?'
-        },
-        'barbell lifts' : {
-            'name' : 'barbell lifts',
-            'percentage' : 1,
-            'addlText' : 'How much weight you liftin?'
-        },
-        'tricep dips' : {
-            'name' : 'tricep dips',
-            'percentage' : 1,
-            'addlText' : 'How much weight you liftin?'
-        },
-        'bulgur squats' : {
-            'name' : 'bulgur squats',
-            'percentage' : 0.68,
-            'addlText' : 'What is your body weight?'
-        },
-    }
+    // const exercises = {
+    //     'push ups' : {
+    //         'name' : 'push ups',
+    //         'percentage' : 0.68,
+    //         'addlText' : 'What is your body weight?'
+    //     },
+    //     'sit ups' : {
+    //         'name' : 'sit ups',
+    //         'percentage' : 0.6,
+    //         'addlText' : 'What is your body weight?'
+    //     },
+    //     'pull ups' : {
+    //         'name' : 'pull ups',
+    //         'percentage' : 0.92,
+    //         'addlText' : 'What is your body weight?'
+    //     },
+    //     'curls' : {
+    //         'name' : 'curls',
+    //         'percentage' : 1,
+    //         'addlText' : 'How much weight you liftin?'
+    //     },
+    //     'bell squats' : {
+    //         'name' : 'bell squats',
+    //         'percentage' : 0.72,
+    //         'addlText' : 'What is your body weight?'
+    //     },
+    //     'bell whips' : {
+    //         'name' : 'bell whips',
+    //         'percentage' : 1,
+    //         'addlText' : 'How much weight you liftin?'
+    //     },
+    //     'bench press' : {
+    //         'name' : 'bench press',
+    //         'percentage' : 1,
+    //         'addlText' : 'How much weight you liftin?'
+    //     },
+    //     'rows' : {
+    //         'name' : 'rows',
+    //         'percentage' : 1,
+    //         'addlText' : 'How much weight you liftin?'
+    //     },
+    //     'barbell lifts' : {
+    //         'name' : 'barbell lifts',
+    //         'percentage' : 1,
+    //         'addlText' : 'How much weight you liftin?'
+    //     },
+    //     'tricep dips' : {
+    //         'name' : 'tricep dips',
+    //         'percentage' : 1,
+    //         'addlText' : 'How much weight you liftin?'
+    //     },
+    //     'bulgur squats' : {
+    //         'name' : 'bulgur squats',
+    //         'percentage' : 0.68,
+    //         'addlText' : 'What is your body weight?'
+    //     },
+    // }
 
     const exclamations = ['Shit', 'GodDAMN', 'Good LORD', 'Hot damn', 'Fuck', 'Fucking hell', 'Good gravy', 'Proper pumpin', 'Big pump'];
 

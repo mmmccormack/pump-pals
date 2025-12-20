@@ -133,15 +133,46 @@ button {
 .hidden {
     display: none;
 }
-.workoutList {
+.addExercise {
     display: grid;
-    grid-template-columns: 3fr 0.4fr;
-    grid-row-gap: 5px;
-    width: 200px;
-    margin: 0 auto;
+    grid-template-columns: 100px 120px 100px;
+    grid-template-rows: 30px 20px 30px 50px;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
+    margin-top: 10px;
     border-top: 1px solid azure;
-    border-bottom: 1px solid azure;
-    padding: 10px;
+
+    & h3 {
+      grid-area: 1 / 1 / 2 / 4;
+      margin: 0 auto;
+    }
+    & h6 {
+        margin: 0;
+        text-align: center;
+    }
+    & label {
+        font-size: 65%;
+        text-align: center;
+    }
+    & .weightType {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    & input[type="text"] {
+        height: 20px;
+    }
+    & input[type="number"] {
+        height: 20px;
+        width: 70%;
+        margin: 0 auto;
+    }
+    & button {
+        width: 50%;
+        margin: 10px auto 0px;
+        grid-area: 4 / 1 / 5 / 4;
+    }
 }
 .weightLiftedModal {
     width: 300px;

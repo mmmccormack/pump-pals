@@ -147,6 +147,8 @@ const addRow = () => {
     }
     document.querySelector(`.completedSet${totalRows}`).addEventListener('click', e => getRowAndExercise(e));
     document.querySelector(`.removeSet${totalRows}`).addEventListener('click', e => getRowForRemoval(e));
+    document.getElementById(`sets${totalRows}`).addEventListener(`click`, e => e.target.value = ``);
+    document.getElementById(`reps${totalRows}`).addEventListener(`click`, e => e.target.value = ``);
 }
 
 const getRowForRemoval = e => {

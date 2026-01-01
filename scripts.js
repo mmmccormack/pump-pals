@@ -212,9 +212,7 @@ const checkWorkoutComplete = () => {
         let weightTotal = 0;
         const weightBoxes = document.querySelectorAll(`.weightInTotal`);
         weightBoxes.forEach(box => weightTotal = weightTotal + ~~box.innerText);
-        setTimeout(() => {
-            displayResults(weightTotal);
-        }, 1000)
+        setTimeout(() => { displayResults(weightTotal) }, 1000);
     }
 }
 
@@ -232,6 +230,13 @@ const displayResults = weightTotal => {
     document.querySelector(`.pumpComparison`).innerText = `${pumpComparison(workoutInfo.previousPump, weightTotal)}`;
     const workoutToSave = {};
     workoutToSave.previousPump = weightTotal;
+    const previousTotal = workoutInfo.weightToDate; 
+    if (previousTotal == undefined || previousTotal == null) {
+        workoutToSave.weightToDate = weightTotal;
+    } else {
+        workoutToSave.weightToDate = previousTotal + weightTotal;
+    }
+    document.getElementById('weightToDate').innerText = Math.round(workoutToSave.weightToDate);
     const updateRef = ref(database, pumperUID)
     return update(updateRef, workoutToSave);
 }
@@ -285,9 +290,8 @@ const addExerciseToSelects = newExerciseName => {
     const newOption = document.createElement(`option`);
     newOption.value, newOption.text = newExerciseName;
     const allSelects = document.querySelectorAll(`select`);
-    allSelects.forEach(select => select.add(newOption))
+    allSelects.forEach(select => select.add(newOption));
 }
-
 
 const resetWorkout = () => {
     const rowInputs = document.querySelectorAll(`input`);
@@ -308,7 +312,6 @@ const bodyWeightButton = document.getElementById(`body`);
 bodyWeightButton.addEventListener(`change`, () => {
     if (bodyWeightButton.checked) document.getElementById(`bodyWeightPercent`).disabled = false;
 })
-
 
 // mainstay button event listeners
 document.querySelector(`.addNewPumper`).addEventListener(`click`, () => {

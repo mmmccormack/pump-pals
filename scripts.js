@@ -21,31 +21,33 @@ let mainList = {};
 let pumperUID;
 let exercises = {};
 
-get(dbRef).then((snapshot) => {
-    if(snapshot.exists()){
-        mainList = snapshot.val();
-        exercises = mainList.exercises;
-        delete mainList.exercises;
-        const pumperList = document.querySelector(`.pumperList`);
-        if (mainList !== null) {
-            for (let pumper in mainList) {
-                const nameAndID = {};
-                nameAndID.name = mainList[pumper].name;
-                nameAndID.id = pumper;
-                const pumperInList = document.createElement(`li`);
-                pumperInList.innerText = nameAndID.name;
-                pumperInList.id = nameAndID.id;
-                pumperInList.addEventListener(`click`, e => loadWorkout(e.target.id));
-                pumperList.appendChild(pumperInList)
-            }  
+const loadWorkoutData = () => {
+    get(dbRef).then((snapshot) => {
+        if(snapshot.exists()){
+            mainList = snapshot.val();
+            exercises = mainList.exercises;
+            delete mainList.exercises;
+            const pumperList = document.querySelector(`.pumperList`);
+            if (mainList !== null) {
+                for (let pumper in mainList) {
+                    const nameAndID = {};
+                    nameAndID.name = mainList[pumper].name;
+                    nameAndID.id = pumper;
+                    const pumperInList = document.createElement(`li`);
+                    pumperInList.innerText = nameAndID.name;
+                    pumperInList.id = nameAndID.id;
+                    pumperInList.addEventListener(`click`, e => loadWorkout(e.target.id));
+                    pumperList.appendChild(pumperInList)
+                }  
+            } else {
+                document.querySelector(`.noPumpers`).classList.remove(`hidden`);
+            }
         } else {
             document.querySelector(`.noPumpers`).classList.remove(`hidden`);
+            console.log("No data available")
         }
-    } else {
-        document.querySelector(`.noPumpers`).classList.remove(`hidden`);
-        console.log("No data available")
-    }
-})
+    })
+}
 
 const addNewPumper = name => {
     const pumperData = {};
@@ -159,13 +161,25 @@ const getRowForRemoval = e => {
 
 const removeRow = (e, row) => {
     e.stopImmediatePropagation();
+    const removedRow = row.classList[2];
+    const rowNumber = ~~removedRow[removedRow.length - 1];
     row.classList.add('removeRow');
     setTimeout(() => { 
         row.remove();
-        const remainingRows = document.querySelectorAll('.dataRow');
-        remainingRows.forEach((remainingRow, index) => {
-            remainingRow.classList.remove(remainingRow.classList[remainingRow.classList.length - 1]);
-            remainingRow.classList.add(`row${index}`)
+        const completeTable = document.querySelector(`.pumpTable`);
+        const allTableItems = completeTable.querySelectorAll(`*`);
+        allTableItems.forEach(item => {
+            if (item.id && ~~item.id[item.id.length - 1] > rowNumber) {
+                item.id = item.id.replace(~~item.id[item.id.length - 1], ~~item.id[item.id.length - 1] - 1);
+            }
+            if (item.name && ~~item.name[item.name.length - 1] > rowNumber) {
+                item.name = item.name.replace(~~item.name[item.name.length - 1], ~~item.name[item.name.length - 1] - 1);
+            }
+            if (item.classList[item.classList.length - 1] && ~~item.classList[item.classList.length-1].at(-1) > rowNumber) {
+                let lastClass = item.classList[item.classList.length - 1];
+                lastClass = lastClass.replace( ~~lastClass.at(-1), ~~lastClass.at(-1) - 1);
+                item.classList.replace(item.classList[item.classList.length - 1], lastClass)
+            }
         })
         checkWorkoutComplete();
     }, 500)
@@ -229,7 +243,9 @@ const displayResults = weightTotal => {
     document.getElementById('itemToMeasureWith').innerText = Object.keys(itemsToWeigh[itemToWeigh]);
     document.querySelector(`.pumpComparison`).innerText = `${pumpComparison(workoutInfo.previousPump, weightTotal)}`;
     const workoutToSave = {};
+    console.log(weightTotal)
     workoutToSave.previousPump = weightTotal;
+    workoutToSave.weightAndDate = recordWeightAndDate(workoutInfo, weightTotal);
     const previousTotal = workoutInfo.weightToDate; 
     if (previousTotal == undefined || previousTotal == null) {
         workoutToSave.weightToDate = weightTotal;
@@ -239,6 +255,18 @@ const displayResults = weightTotal => {
     document.getElementById('weightToDate').innerText = Math.round(workoutToSave.weightToDate);
     const updateRef = ref(database, pumperUID)
     return update(updateRef, workoutToSave);
+}
+
+const recordWeightAndDate = (workoutInfo, weightTotal) => {
+    const date = new Date().toDateString();
+    const weightAndDate = {};
+    weightAndDate[date] = weightTotal;
+    if (workoutInfo.weightAndDate == undefined || workoutInfo.previousPump == null) {
+        workoutInfo.weightAndDate = [weightAndDate];
+    } else {
+        workoutInfo.weightAndDate.push(weightAndDate);
+    }
+    return workoutInfo.weightAndDate;
 }
 
 const pumpComparison = (previousPump, currentPump) => {
@@ -300,7 +328,7 @@ const resetWorkout = () => {
     rowSelects.forEach(box => box.classList.remove('setComplete'));
     const weightTotals = document.querySelectorAll(`.weightInTotal`);
     weightTotals.forEach(box => box.innerText = ``);
-    // need to reset running weight total variable
+    // need to readd any removed workouts into list
 }
 
 //radio button event listeners
@@ -323,6 +351,9 @@ document.querySelector('.reset').addEventListener('click', () => resetWorkout())
 document.querySelector(`.saveWorkout`).addEventListener(`click`, e => saveWorkout(e.target.fbid));
 document.querySelector(`.addExerciseButton`).addEventListener(`click`, () => addNewExercise());
 document.querySelector(`.closeModal`).addEventListener(`click`, () => {
+    loadWorkoutData();
     resetWorkout();
     document.querySelector(`.weightLiftedModal`).style.display = `none`;
 });
+
+loadWorkoutData();

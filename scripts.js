@@ -243,7 +243,6 @@ const displayResults = weightTotal => {
     document.getElementById('itemToMeasureWith').innerText = Object.keys(itemsToWeigh[itemToWeigh]);
     document.querySelector(`.pumpComparison`).innerText = `${pumpComparison(workoutInfo.previousPump, weightTotal)}`;
     const workoutToSave = {};
-    console.log(weightTotal)
     workoutToSave.previousPump = weightTotal;
     workoutToSave.weightAndDate = recordWeightAndDate(workoutInfo, weightTotal);
     const previousTotal = workoutInfo.weightToDate; 
@@ -252,7 +251,9 @@ const displayResults = weightTotal => {
     } else {
         workoutToSave.weightToDate = previousTotal + weightTotal;
     }
+    mainList[pumperUID] = workoutInfo;
     document.getElementById('weightToDate').innerText = Math.round(workoutToSave.weightToDate);
+    loadYearlyProgress(mainList[pumperUID]);
     const updateRef = ref(database, pumperUID)
     return update(updateRef, workoutToSave);
 }
@@ -329,6 +330,24 @@ const resetWorkout = () => {
     const weightTotals = document.querySelectorAll(`.weightInTotal`);
     weightTotals.forEach(box => box.innerText = ``);
     // need to readd any removed workouts into list
+}
+
+const loadYearlyProgress = pumper => {
+    pumper.weightAndDate.forEach(entry => {
+        const date = Object.keys(entry)[0];
+        let weight = String(entry[date]);
+        const dateBar = document.createElement(`div`);
+        const weightSpot = document.createElement(`div`);
+        dateBar.classList.add(`dateBar`);
+        dateBar.innerHTML = `<span>${date.slice(3,7)}<br>${date.slice(8,-5)}</span>`;
+        weightSpot.classList.add(`weightSpot`);
+        weightSpot.innerText = weight;
+        weightSpot.style.height = `${~~weight / 100}px`;
+        for (let i = weight.length; i < 6; i++) weight = `D${weight}`
+        weightSpot.style.background = `#${weight}80`;
+        dateBar.appendChild(weightSpot);
+        document.querySelector(`.graph`).appendChild(dateBar);
+    });
 }
 
 //radio button event listeners

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+</head>
+<style>
+    .graph {
+        display: flex;
+        max-width: 300px;
+        margin: 0 auto;
+        overflow-x: scroll;
+    }
+    .dateBar {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 300px;
+        min-width: 40px;
+        text-align: center;
+        border-radius: 8px;
+        border: 1px solid azure;
+        margin: 0 2px;
+        & span {
+            border-bottom: 1px solid white;
+            width: 100%;
+        }
+    }
+    .weightSpot {
+        justify-content: center;
+        align-items: center;
+        padding: 4px;
+    }
+</style>
+<body>
+    <div class="yearlyTotals">
+        <h2>Pumpin Progress</h2>
+        <div class="graph">
+        </div>
+    </div>
+</body>
+<script type="module">
+    import { database, ref, dbRef, get, push, set, update } from "./firebase.js";
+
+    get(dbRef).then((snapshot) => {
+        if(snapshot.exists()){
+            const mainList = snapshot.val()[`-OgtUEhl2thjp5zetdf3`].weightAndDate;
+            mainList.forEach(entry => {
+                const date = Object.keys(entry)[0];
+                let weight = String(entry[date]);
+                const dateBar = document.createElement(`div`);
+                const weightSpot = document.createElement(`div`);
+                dateBar.classList.add(`dateBar`);
+                dateBar.innerHTML = `<span>${date.slice(3,7)}<br>${date.slice(8,-5)}</span>`;
+                weightSpot.classList.add(`weightSpot`);
+                weightSpot.innerText = weight;
+                weightSpot.style.height = `${~~weight / 100}px`;
+                for (let i = weight.length; i < 6; i++) weight = `D${weight}`
+                weightSpot.style.background = `#${weight}80`;
+                dateBar.appendChild(weightSpot);
+                document.querySelector(`.graph`).appendChild(dateBar);
+            })
+        } else {
+            document.querySelector(`.noPumpers`).classList.remove(`hidden`);
+            console.log("No data available")
+        }
+    })
+</script>
+</html>

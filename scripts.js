@@ -60,6 +60,8 @@ const addNewPumper = name => {
 }
 
 const loadWorkout = pumperID => {
+    const dataRows = document.querySelectorAll(`.dataRow`);
+    dataRows.forEach(row => row.remove());
     const workoutInfo = mainList[pumperID];
     pumperUID = pumperID;
     document.querySelector(`.pumpLogin`).style.display = `none`;
@@ -254,8 +256,8 @@ const displayResults = weightTotal => {
     mainList[pumperUID] = workoutInfo;
     document.getElementById('weightToDate').innerText = Math.round(workoutToSave.weightToDate);
     loadYearlyProgress(mainList[pumperUID]);
-    const updateRef = ref(database, pumperUID)
-    return update(updateRef, workoutToSave);
+    // const updateRef = ref(database, pumperUID)
+    // return update(updateRef, workoutToSave);
 }
 
 const recordWeightAndDate = (workoutInfo, weightTotal) => {
@@ -333,12 +335,16 @@ const resetWorkout = () => {
 }
 
 const loadYearlyProgress = pumper => {
-    pumper.weightAndDate.forEach(entry => {
+    const dateBars = document.querySelectorAll(`.dateBar`);
+    dateBars.forEach(bar => bar.remove());
+    const findPB = [];
+    pumper.weightAndDate.forEach((entry, index) => {
         const date = Object.keys(entry)[0];
+        findPB.push(entry[date]);
         let weight = String(entry[date]);
         const dateBar = document.createElement(`div`);
         const weightSpot = document.createElement(`div`);
-        dateBar.classList.add(`dateBar`);
+        dateBar.classList.add(`dateBar`, `date${index}`);
         dateBar.innerHTML = `<span>${date.slice(3,7)}<br>${date.slice(8,-5)}</span>`;
         weightSpot.classList.add(`weightSpot`);
         weightSpot.innerText = weight;
@@ -347,7 +353,12 @@ const loadYearlyProgress = pumper => {
         weightSpot.style.background = `#${weight}80`;
         dateBar.appendChild(weightSpot);
         document.querySelector(`.graph`).appendChild(dateBar);
-    });
+    })
+    const personalBest = findPB.indexOf(Math.max(...findPB));
+    const pbDiv = document.createElement(`span`);
+    pbDiv.classList.add(`pb`);
+    pbDiv.innerHTML = `💪🏼`;
+    document.querySelector(`.date${personalBest}`).appendChild(pbDiv);
 }
 
 //radio button event listeners
@@ -370,9 +381,18 @@ document.querySelector('.reset').addEventListener('click', () => resetWorkout())
 document.querySelector(`.saveWorkout`).addEventListener(`click`, e => saveWorkout(e.target.fbid));
 document.querySelector(`.addExerciseButton`).addEventListener(`click`, () => addNewExercise());
 document.querySelector(`.closeModal`).addEventListener(`click`, () => {
-    loadWorkoutData();
+    loadWorkout(pumperUID);
     resetWorkout();
     document.querySelector(`.weightLiftedModal`).style.display = `none`;
+});
+document.querySelector(`.viewProgress`).addEventListener(`click`, () => {
+    document.querySelector(`.weightLiftedModal`).style.display = 'none';
+    document.querySelector(`.yearlyTotals`).style.display = 'flex';
+})
+document.querySelector(`.closeProgress`).addEventListener(`click`, () => {
+    loadWorkout(pumperUID);
+    resetWorkout();
+    document.querySelector(`.yearlyTotals`).style.display = `none`;
 });
 
 loadWorkoutData();

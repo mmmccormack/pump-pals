@@ -25,8 +25,15 @@
         border: 1px solid azure;
         margin: 0 2px;
         & span {
-            border-bottom: 1px solid white;
             width: 100%;
+        }
+        .pb {
+            position: relative;
+            top: -30px;
+            width: max-content;
+            padding: 3px;
+            background: #050505;
+            border-radius: 50%;
         }
     }
     .weightSpot {
@@ -38,6 +45,7 @@
 <body>
     <div class="yearlyTotals">
         <h2>Pumpin Progress</h2>
+        <h3>Weight in LBS</h3>
         <div class="graph">
         </div>
     </div>
@@ -48,12 +56,14 @@
     get(dbRef).then((snapshot) => {
         if(snapshot.exists()){
             const mainList = snapshot.val()[`-OgtUEhl2thjp5zetdf3`].weightAndDate;
-            mainList.forEach(entry => {
+            const findPB = [];
+            mainList.forEach((entry, index) => {
                 const date = Object.keys(entry)[0];
+                findPB.push(entry[date]);
                 let weight = String(entry[date]);
                 const dateBar = document.createElement(`div`);
                 const weightSpot = document.createElement(`div`);
-                dateBar.classList.add(`dateBar`);
+                dateBar.classList.add(`dateBar`, `date${index}`);
                 dateBar.innerHTML = `<span>${date.slice(3,7)}<br>${date.slice(8,-5)}</span>`;
                 weightSpot.classList.add(`weightSpot`);
                 weightSpot.innerText = weight;
@@ -63,8 +73,12 @@
                 dateBar.appendChild(weightSpot);
                 document.querySelector(`.graph`).appendChild(dateBar);
             })
+            const personalBest = findPB.indexOf(Math.max(...findPB));
+            const pbDiv = document.createElement(`span`);
+            pbDiv.classList.add(`pb`);
+            pbDiv.innerHTML = `💪🏼`;
+            document.querySelector(`.date${personalBest}`).appendChild(pbDiv);
         } else {
-            document.querySelector(`.noPumpers`).classList.remove(`hidden`);
             console.log("No data available")
         }
     })

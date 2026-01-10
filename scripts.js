@@ -256,8 +256,8 @@ const displayResults = weightTotal => {
     mainList[pumperUID] = workoutInfo;
     document.getElementById('weightToDate').innerText = Math.round(workoutToSave.weightToDate);
     loadYearlyProgress(mainList[pumperUID]);
-    // const updateRef = ref(database, pumperUID)
-    // return update(updateRef, workoutToSave);
+    const updateRef = ref(database, pumperUID)
+    return update(updateRef, workoutToSave);
 }
 
 const recordWeightAndDate = (workoutInfo, weightTotal) => {

@@ -48,6 +48,7 @@
         <h3>Weight in LBS</h3>
         <div class="graph">
         </div>
+        <button class="closeProgress">Close Window</button>
     </div>
 </body>
 <script type="module">
@@ -56,6 +57,8 @@
     get(dbRef).then((snapshot) => {
         if(snapshot.exists()){
             const mainList = snapshot.val()[`-OgtUEhl2thjp5zetdf3`].weightAndDate;
+            const dateBars = document.querySelectorAll(`.dateBar`);
+            dateBars.forEach(bar => bar.remove());
             const findPB = [];
             mainList.forEach((entry, index) => {
                 const date = Object.keys(entry)[0];

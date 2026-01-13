@@ -350,7 +350,7 @@ const loadYearlyProgress = pumper => {
         weightSpot.innerText = weight;
         weightSpot.style.height = `${~~weight / 100}px`;
         for (let i = weight.length; i < 6; i++) weight = `D${weight}`
-        weightSpot.style.background = `#${weight}80`;
+        weightSpot.style.background = `#${weight}`;
         dateBar.appendChild(weightSpot);
         document.querySelector(`.graph`).appendChild(dateBar);
     })

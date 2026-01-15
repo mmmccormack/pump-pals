@@ -381,8 +381,8 @@ document.querySelector('.reset').addEventListener('click', () => resetWorkout())
 document.querySelector(`.saveWorkout`).addEventListener(`click`, e => saveWorkout(e.target.fbid));
 document.querySelector(`.addExerciseButton`).addEventListener(`click`, () => addNewExercise());
 document.querySelector(`.closeModal`).addEventListener(`click`, () => {
-    loadWorkout(pumperUID);
     resetWorkout();
+    loadWorkout(pumperUID);
     document.querySelector(`.weightLiftedModal`).style.display = `none`;
 });
 document.querySelector(`.viewProgress`).addEventListener(`click`, () => {
@@ -390,8 +390,8 @@ document.querySelector(`.viewProgress`).addEventListener(`click`, () => {
     document.querySelector(`.yearlyTotals`).style.display = 'flex';
 })
 document.querySelector(`.closeProgress`).addEventListener(`click`, () => {
-    loadWorkout(pumperUID);
     resetWorkout();
+    loadWorkout(pumperUID);
     document.querySelector(`.yearlyTotals`).style.display = `none`;
 });
 

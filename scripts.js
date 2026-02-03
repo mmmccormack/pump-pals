@@ -111,6 +111,7 @@ const saveWorkout = pumperID => {
         return set(ref(database, pumperID), workoutToSave);
     } else {
         // update workoutToSave
+        workoutToSave.bodyWeight = ~~bodyWeight;
         workoutToSave.exercises = exercises;
         workoutToSave.sets = sets;
         workoutToSave.reps = reps;

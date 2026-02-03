@@ -224,11 +224,11 @@ button {
     }
     .pb {
         position: relative;
-        top: -30px;
+        top: -40px;
         width: max-content;
-        padding: 3px;
+        padding: 4px;
         background: #050505;
-        border-radius: 50%;
+        border-radius: 40%;
     }
 }
 .weightSpot {

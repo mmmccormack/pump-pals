@@ -207,15 +207,17 @@ const completeSet = (rowNumber, exerciseName) => {
             document.getElementById(`bodyWeight`).value = weightInSet;
         }
     }
-    const setsNumber = ~~document.getElementById(`sets${rowNumber}`).value;
-    const repsNumber = ~~document.getElementById(`reps${rowNumber}`).value;
-    const totalWeight = Math.round(setsNumber * repsNumber * (weightInSet * exerciseInfo.percentage));
-    document.querySelector(`.weightInTotal${rowNumber}`).innerText = totalWeight;
-    const rowInputs = document.querySelectorAll(`.row${rowNumber} input`);
-    rowInputs.forEach(box => box.classList.add('setComplete'));
-    const rowSelects = document.querySelectorAll(`.row${rowNumber} select`);
-    rowSelects.forEach(box => box.classList.add('setComplete'));
-    checkWorkoutComplete();
+    if (weightInSet !== 0) {
+        const setsNumber = ~~document.getElementById(`sets${rowNumber}`).value;
+        const repsNumber = ~~document.getElementById(`reps${rowNumber}`).value;
+        const totalWeight = Math.round(setsNumber * repsNumber * (weightInSet * exerciseInfo.percentage));
+        document.querySelector(`.weightInTotal${rowNumber}`).innerText = totalWeight;
+        const rowInputs = document.querySelectorAll(`.row${rowNumber} input`);
+        rowInputs.forEach(box => box.classList.add('setComplete'));
+        const rowSelects = document.querySelectorAll(`.row${rowNumber} select`);
+        rowSelects.forEach(box => box.classList.add('setComplete'));
+        checkWorkoutComplete();
+    }
 }
 
 const checkWorkoutComplete = () => {

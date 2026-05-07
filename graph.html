@@ -43,7 +43,7 @@
     }
 </style>
 <body>
-    <div class="yearlyTotals">
+    <div class="yearlyTotals" style="display:flex">
         <h2>Pumpin Progress</h2>
         <h3>Weight in LBS</h3>
         <div class="graph">
@@ -81,9 +81,14 @@
             pbDiv.classList.add(`pb`);
             pbDiv.innerHTML = `💪🏼`;
             document.querySelector(`.date${personalBest}`).appendChild(pbDiv);
+
+            document.querySelector(`.graph`).lastChild.scrollIntoView();
         } else {
             console.log("No data available")
         }
     })
+
+
+
 </script>
 </html>

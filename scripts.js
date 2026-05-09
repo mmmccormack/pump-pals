@@ -362,8 +362,7 @@ const loadYearlyProgress = pumper => {
     pbDiv.classList.add(`pb`);
     pbDiv.innerHTML = `💪🏼`;
     document.querySelector(`.date${personalBest}`).appendChild(pbDiv);
-    
-    document.querySelector(`.graph`).lastChild.scrollIntoView();
+    document.querySelector(`.graph`).lastElementChild.scrollIntoView({block: 'end', behavior: 'auto'});
 }
 
 //radio button event listeners

@@ -60,6 +60,7 @@
             const dateBars = document.querySelectorAll(`.dateBar`);
             dateBars.forEach(bar => bar.remove());
             const findPB = [];
+            mainList.reverse();
             mainList.forEach((entry, index) => {
                 const date = Object.keys(entry)[0];
                 findPB.push(entry[date]);
@@ -82,7 +83,6 @@
             pbDiv.innerHTML = `💪🏼`;
             document.querySelector(`.date${personalBest}`).appendChild(pbDiv);
 
-            document.querySelector(`.graph`).lastChild.scrollIntoView();
         } else {
             console.log("No data available")
         }

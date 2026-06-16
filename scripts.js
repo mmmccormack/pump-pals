@@ -341,6 +341,7 @@ const loadYearlyProgress = pumper => {
     const dateBars = document.querySelectorAll(`.dateBar`);
     dateBars.forEach(bar => bar.remove());
     const findPB = [];
+    pumper.weightAndDate.reverse();
     pumper.weightAndDate.forEach((entry, index) => {
         const date = Object.keys(entry)[0];
         findPB.push(entry[date]);
@@ -362,7 +363,6 @@ const loadYearlyProgress = pumper => {
     pbDiv.classList.add(`pb`);
     pbDiv.innerHTML = `💪🏼`;
     document.querySelector(`.date${personalBest}`).appendChild(pbDiv);
-    document.querySelector(`.graph`).lastElementChild.scrollIntoView({block: 'end', behavior: 'auto'});
 }
 
 //radio button event listeners
